@@ -1,10 +1,11 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 
 import {AsyncListData, useAsyncList} from '@react-stately/data';
-import React, {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {DownshiftProps, LoadingState} from '../interface';
 import {UseComboboxProps, UseSelectProps} from 'downshift';
+import * as Radix from '@radix-ui/react-primitive';
 
 interface UseDownshiftAsyncListProps<T, C>
     extends Pick<DownshiftProps<T, C>, 'getItems'> {
@@ -18,7 +19,7 @@ interface UseDownshiftAsyncListProps<T, C>
 interface useDownShiftAsyncListReturn<T> extends AsyncListData<T> {
     load: () => void;
     clearItems: () => void;
-    listBoxProps: React.ComponentPropsWithoutRef<'ul'>;
+    listBoxProps: Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
 }
 
 export const useDownshiftAsyncList = <T, C>(

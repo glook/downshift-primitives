@@ -4,14 +4,13 @@ import {Slot} from '@radix-ui/react-slot';
 import React from 'react';
 
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
+import * as Radix from '@radix-ui/react-primitive';
 
-export interface DownshiftArrowProps
-    extends React.ComponentPropsWithoutRef<'span'> {
-    asChild?: boolean;
-}
+export type DownshiftArrowElement = React.ElementRef<typeof Radix.Primitive.span>;
+export type DownshiftArrowProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span>;
 
 export const DownshiftArrow = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftArrowElement,
     DownshiftArrowProps
 >((props, ref): React.ReactElement | null => {
     const {downshiftProps} = useBaseDownshiftContext('DownshiftArrow');

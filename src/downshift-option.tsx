@@ -8,9 +8,10 @@ import {
     useBaseDownshiftContext,
     useDownshiftListBoxContext,
 } from './downshiftComboboxContext';
+import * as Radix from '@radix-ui/react-primitive';
 
-interface DownshiftOptionProps<T extends unknown>
-    extends React.HTMLProps<HTMLElement> {
+export interface DownshiftOptionProps<T extends unknown>
+    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     asChild?: boolean;
     item: T;
     index: number;

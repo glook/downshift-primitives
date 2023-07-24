@@ -18,7 +18,7 @@ import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating';
 import {objectFilterUndefinedValues} from './utils';
 import {DownshiftProps} from './interface.ts';
 
-interface DownshiftComboboxProps<Item, Cursor>
+export interface DownshiftComboboxProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
         Pick<
             UseComboboxProps<Item>,
@@ -80,7 +80,7 @@ export const DownshiftCombobox = <T, C>(
                 switch (type) {
                     case useCombobox.stateChangeTypes.InputKeyDownArrowDown:
                         if (
-                            changes.highlightedIndex &&
+                            changes.highlightedIndex !== undefined &&
                             changes.highlightedIndex < state.highlightedIndex
                         ) {
                             return {
@@ -91,7 +91,7 @@ export const DownshiftCombobox = <T, C>(
                         return changes;
                     case useCombobox.stateChangeTypes.InputKeyDownArrowUp:
                         if (
-                            changes.highlightedIndex &&
+                            changes.highlightedIndex !== undefined &&
                             changes.highlightedIndex > state.highlightedIndex
                         ) {
                             return {

@@ -10,9 +10,10 @@ import {
 import React from 'react';
 import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating.ts';
 import {LoadingState} from './interface.ts';
+import * as Radix from '@radix-ui/react-primitive';
 
 interface DownshiftContext {
-    listBoxProps: React.ComponentPropsWithoutRef<'ul'>;
+    listBoxProps: Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
     items: unknown[];
     loadingState: LoadingState;
     isLoading?: boolean;

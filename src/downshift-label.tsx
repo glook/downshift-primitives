@@ -3,13 +3,13 @@
 import React from 'react';
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {Slot} from '@radix-ui/react-slot';
+import * as Radix from '@radix-ui/react-primitive';
 
-interface DownshiftLabelProps extends React.ComponentPropsWithRef<'label'> {
-    asChild?: boolean;
-}
+export type DownshiftLabelElement = React.ElementRef<typeof Radix.Primitive.label>;
+export type DownshiftLabelProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.label>;
 
 export const DownshiftLabel = React.forwardRef<
-    HTMLLabelElement,
+    DownshiftLabelElement,
     DownshiftLabelProps
 >((props, ref): React.ReactElement => {
     const {downshiftProps} = useBaseDownshiftContext('DownshiftArrow');

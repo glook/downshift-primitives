@@ -12,7 +12,7 @@ import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating';
 import {objectFilterUndefinedValues} from './utils';
 import {DownshiftProps} from './interface.ts';
 
-interface DownshiftSelectProps<Item, Cursor>
+export interface DownshiftSelectProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
         Pick<
             UseSelectProps<Item>,

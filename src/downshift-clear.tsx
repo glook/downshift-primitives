@@ -8,16 +8,18 @@ import {
     useDownshiftComboboxContext,
 } from './downshiftComboboxContext';
 import {mergeProps} from '@react-aria/utils';
+import * as Radix from '@radix-ui/react-primitive';
+
+export type DownshiftClearElement = React.ElementRef<typeof Radix.Primitive.span>;
 
 export interface DownshiftClearProps
-    extends React.HTMLAttributes<HTMLSpanElement> {
+    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     forceMount?: boolean;
-    asChild?: boolean;
     showOnHover?: boolean;
 }
 
 const BaseDownshiftClear = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftClearElement,
     DownshiftClearProps
 >((props: DownshiftClearProps, ref): React.ReactElement | null => {
     const {asChild, children, forceMount, style, showOnHover, ...rest} = props;
@@ -57,7 +59,7 @@ const BaseDownshiftClear = React.forwardRef<
 });
 
 const DownshiftSelectClear = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftClearElement,
     DownshiftClearProps
 >((props: DownshiftClearProps, ref): React.ReactElement | null => {
     const {downshiftProps} = useBaseDownshiftContext('DownshiftClear');
@@ -71,7 +73,7 @@ const DownshiftSelectClear = React.forwardRef<
 });
 
 const DownshiftComboboxClear = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftClearElement,
     DownshiftClearProps
 >((props: DownshiftClearProps, ref): React.ReactElement | null => {
     const {downshiftProps} = useDownshiftComboboxContext('DownshiftClear');
@@ -100,7 +102,7 @@ const DownshiftComboboxClear = React.forwardRef<
 });
 
 export const DownshiftClear = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftClearElement,
     DownshiftClearProps
 >((props: DownshiftClearProps, ref): React.ReactElement | null => {
     const {type} = useBaseDownshiftContext('DownshiftClear');

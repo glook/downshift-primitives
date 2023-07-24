@@ -2,18 +2,16 @@
 
 import React from 'react';
 
-import {DownshiftOptionState} from './downshift-option-state';
+import {
+    DownshiftOptionState,
+    DownshiftOptionStateComponentProps,
+    DownshiftOptionStateElement,
+} from './downshift-option-state';
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 
-export interface DownshiftOptionErrorProps
-    extends React.ComponentPropsWithoutRef<'li'> {
-    asChild?: boolean;
-    forceMount?: boolean;
-}
-
 export const DownshiftOptionError = React.forwardRef<
-    HTMLLIElement,
-    DownshiftOptionErrorProps
+    DownshiftOptionStateElement,
+    DownshiftOptionStateComponentProps
 >((props, ref): React.ReactElement | null => {
     const {loadingState, downshiftProps} =
         useBaseDownshiftContext('DownshiftListBox');

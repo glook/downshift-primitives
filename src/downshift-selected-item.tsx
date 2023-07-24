@@ -6,11 +6,13 @@ import {
     useBaseDownshiftContext,
     useDownshiftComboboxContext,
 } from './downshiftComboboxContext';
+import * as Radix from '@radix-ui/react-primitive';
 
-interface SelectedItemProps
+export type SelectedItemElement = React.ElementRef<typeof Radix.Primitive.span>;
+export interface SelectedItemProps
     extends Omit<React.ComponentPropsWithoutRef<'span'>, 'children'> {}
 
-const SelectedItem = React.forwardRef<HTMLSpanElement, SelectedItemProps>(
+const SelectedItem = React.forwardRef<SelectedItemElement, SelectedItemProps>(
     (props, ref): React.ReactElement | null => {
         const {downshiftProps, renderSelectedItem} =
             useBaseDownshiftContext('SelectedItem');
@@ -33,7 +35,7 @@ const SelectedItem = React.forwardRef<HTMLSpanElement, SelectedItemProps>(
 );
 
 const DownshiftComboboxSelectedItem = React.forwardRef<
-    HTMLSpanElement,
+    SelectedItemElement,
     SelectedItemProps
 >((props, ref): React.ReactElement => {
     const {isFocused} = useDownshiftComboboxContext('DownshiftInput');
@@ -41,7 +43,7 @@ const DownshiftComboboxSelectedItem = React.forwardRef<
 });
 
 export const DownshiftSelectedItem = React.forwardRef<
-    HTMLSpanElement,
+    SelectedItemElement,
     SelectedItemProps
 >((props, ref): React.ReactElement | null => {
     const {type} = useBaseDownshiftContext('DownshiftInput');

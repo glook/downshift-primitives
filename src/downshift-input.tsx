@@ -8,11 +8,17 @@ import {
     useDownshiftComboboxContext,
 } from './downshiftComboboxContext';
 import {preventDownshiftDefault} from './utils';
+import type * as Radix from '@radix-ui/react-primitive';
+import {Slot} from '@radix-ui/react-slot';
+
+export type DownshiftInputElement = React.ElementRef<typeof Radix.Primitive.input>;
+export type DownshiftInputProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.input>;
 
 export const DownshiftInput = React.forwardRef<
-    HTMLInputElement,
-    React.InputHTMLAttributes<HTMLInputElement>
+    DownshiftInputElement,
+    DownshiftInputProps
 >((props, ref): React.ReactElement | null => {
+    const {asChild, ...rest} = props;
     const {isDisabled} = useBaseDownshiftContext('DownshiftInput');
     const {isFocused, downshiftProps, setIsFocused} =
         useDownshiftComboboxContext('DownshiftInput');
@@ -40,9 +46,11 @@ export const DownshiftInput = React.forwardRef<
         },
     });
 
+    const Component = asChild ? Slot : 'input';
+
     return (
-        <input
-            {...mergeProps(inputProps, props)}
+        <Component
+            {...mergeProps(inputProps, rest)}
             data-disabled={isDisabled}
             data-is-focused={isFocused}
             data-has-selected-item={!!selectedItem}

@@ -2,17 +2,17 @@
 
 import React from 'react';
 
-import {DownshiftOptionState} from './downshift-option-state';
+import {DownshiftOptionState, DownshiftOptionStateElement} from './downshift-option-state';
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
+import * as Radix from '@radix-ui/react-primitive';
 
 export interface DownshiftOptionNoItemsProps
-    extends React.ComponentPropsWithoutRef<'li'> {
-    asChild?: boolean;
+    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>{
     forceMount?: boolean;
 }
 
 export const DownshiftOptionNoItems = React.forwardRef<
-    HTMLLIElement,
+    DownshiftOptionStateElement,
     DownshiftOptionNoItemsProps
 >((props, ref): React.ReactElement | null => {
     const {loadingState, downshiftProps, items} =

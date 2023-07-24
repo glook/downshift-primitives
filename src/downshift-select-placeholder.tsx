@@ -7,15 +7,18 @@ import {
     useBaseDownshiftContext,
     useDownshiftSelectContext,
 } from './downshiftComboboxContext';
+import * as Radix from '@radix-ui/react-primitive';
+
+export type DownshiftSelectPlaceholderElement = React.ElementRef<typeof Radix.Primitive.span>;
 
 export interface DownshiftSelectPlaceholderProps
-    extends React.ComponentPropsWithoutRef<'span'> {
+    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span>{
     asChild?: boolean;
     forceMount?: boolean;
 }
 
 export const DownshiftSelectPlaceholder = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftSelectPlaceholderElement,
     DownshiftSelectPlaceholderProps
 >((props, ref): React.ReactElement | null => {
     const {isHovered} = useBaseDownshiftContext('DownshiftSelectPlaceholder');

@@ -5,16 +5,22 @@ import React from 'react';
 
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
+import * as Radix from '@radix-ui/react-primitive';
+
+export type DownshiftOptionStateElement = React.ElementRef<typeof Radix.Primitive.div>;
+
+export interface DownshiftOptionStateComponentProps
+    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
+    forceMount?: boolean;
+}
 
 export interface DownshiftOptionStateProps
-    extends React.ComponentPropsWithoutRef<'li'> {
-    asChild?: boolean;
-    forceMount?: boolean;
+    extends DownshiftOptionStateComponentProps {
     isVisible: boolean;
 }
 
 export const DownshiftOptionState = React.forwardRef<
-    HTMLLIElement,
+    DownshiftOptionStateElement,
     DownshiftOptionStateProps
 >((props, ref): React.ReactElement | null => {
     const {loadingState, downshiftProps} =
@@ -26,7 +32,7 @@ export const DownshiftOptionState = React.forwardRef<
     if (!isVisible && !forceMount) {
         return null;
     }
-    const Component = asChild ? Slot : 'li';
+    const Component = asChild ? Slot : 'div';
 
     return (
         <Component

@@ -3,16 +3,18 @@ import {Slot} from '@radix-ui/react-slot';
 import React from 'react';
 
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
+import * as Radix from '@radix-ui/react-primitive';
+
+export type DownshiftLoadingIndicatorElement = React.ElementRef<typeof Radix.Primitive.span>;
 
 export interface DownshiftLoadingIndicatorProps
-    extends React.ComponentPropsWithoutRef<'span'> {
+    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     forceMount?: boolean;
-    asChild?: boolean;
     children: React.ReactNode;
 }
 
 export const DownshiftLoadingIndicator = React.forwardRef<
-    HTMLSpanElement,
+    DownshiftLoadingIndicatorElement,
     DownshiftLoadingIndicatorProps
 >((props, ref): React.ReactElement | null => {
     const {isLoading, loadingState} = useBaseDownshiftContext(

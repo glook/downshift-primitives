@@ -22,7 +22,7 @@ interface DownshiftListBoxItemsChildrenProps<T> {
     inputValue?: string;
 }
 
-interface DownshiftListBoxItemsProps<T> {
+export interface DownshiftListBoxItemsProps<T> {
     getOptionValue: (value: T) => string;
     children: (props: DownshiftListBoxItemsChildrenProps<T>) => React.ReactNode;
 }
