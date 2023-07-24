@@ -14,9 +14,9 @@ import {DownshiftProps} from './interface.ts';
 
 export interface DownshiftSelectProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
-        Pick<
+        Omit<
             UseSelectProps<Item>,
-            'onSelectedItemChange' | 'selectedItem' | 'isItemDisabled'
+            'items'
         > {}
 
 export const DownshiftSelect = <T, C>(
@@ -24,13 +24,13 @@ export const DownshiftSelect = <T, C>(
 ): React.ReactElement => {
     const {
         renderSelectedItem,
-        selectedItem,
-        onSelectedItemChange,
         disabled,
         isLoading,
         dropdownMenuFloatingOptions,
         children,
         isItemDisabled,
+        onHighlightedIndexChange,
+        ...selectProps
     } = props;
 
     const [highlightedIndex, setHighlightedIndex] = useState<
@@ -49,12 +49,14 @@ export const DownshiftSelect = <T, C>(
     const downshiftProps = useSelect<T>(
         objectFilterUndefinedValues<UseSelectProps<T>>({
             items,
-            selectedItem,
             isItemDisabled,
-            onSelectedItemChange,
             onHighlightedIndexChange: (changes) => {
                 setHighlightedIndex(changes.highlightedIndex);
+                if(onHighlightedIndexChange) {
+                    onHighlightedIndexChange(changes)
+                }
             },
+            ...selectProps,
         }),
     );
 

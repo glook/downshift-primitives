@@ -6,7 +6,7 @@ import {
     UseComboboxState,
     UseComboboxStateChangeOptions,
 } from 'downshift';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useDebounce} from 'use-debounce';
 
 import {
@@ -20,12 +20,9 @@ import {DownshiftProps} from './interface.ts';
 
 export interface DownshiftComboboxProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
-        Pick<
+        Omit<
             UseComboboxProps<Item>,
-            | 'initialInputValue'
-            | 'onSelectedItemChange'
-            | 'selectedItem'
-            | 'isItemDisabled'
+            | 'items'| 'itemToString'
         >,
         Required<Pick<UseComboboxProps<Item>, 'itemToString'>> {
     debounceTime?: number;
@@ -35,9 +32,7 @@ export const DownshiftCombobox = <T, C>(
     props: DownshiftComboboxProps<T, C>,
 ): React.ReactElement => {
     const {
-        selectedItem,
         disabled,
-        itemToString,
         debounceTime = 0,
         renderSelectedItem,
         isLoading, // input
@@ -45,7 +40,9 @@ export const DownshiftCombobox = <T, C>(
         initialInputValue = '',
         children,
         isItemDisabled,
-        onSelectedItemChange,
+        stateReducer,
+        onHighlightedIndexChange,
+        ...comboboxProps
     } = props;
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
     const [highlightedIndex, setHighlightedIndex] = useState<
@@ -61,49 +58,59 @@ export const DownshiftCombobox = <T, C>(
         listBoxProps,
     } = useDownshiftAsyncList({...props, highlightedIndex});
 
+    const comboboxStateReducer = useCallback(
+        (
+            state: UseComboboxState<T>,
+            actionAndChanges: UseComboboxStateChangeOptions<T>,
+        ): Partial<UseComboboxState<T>> => {
+            const {type} = actionAndChanges;
+            const changes = stateReducer
+                ? stateReducer(state, actionAndChanges)
+                : actionAndChanges.changes;
+            // disable circular navigation
+            switch (type) {
+                case useCombobox.stateChangeTypes.InputKeyDownArrowDown:
+                    if (
+                        changes.highlightedIndex !== undefined &&
+                        changes.highlightedIndex < state.highlightedIndex
+                    ) {
+                        return {
+                            ...changes,
+                            highlightedIndex: state.highlightedIndex,
+                        };
+                    }
+                    return changes;
+                case useCombobox.stateChangeTypes.InputKeyDownArrowUp:
+                    if (
+                        changes.highlightedIndex !== undefined &&
+                        changes.highlightedIndex > state.highlightedIndex
+                    ) {
+                        return {
+                            ...changes,
+                            highlightedIndex: state.highlightedIndex,
+                        };
+                    }
+                    return changes;
+                default:
+                    return changes;
+            }
+        },
+        [stateReducer],
+    );
+
     const comboboxMethods = useCombobox(
         objectFilterUndefinedValues<UseComboboxProps<T>>({
             items,
-            selectedItem,
             initialInputValue,
-            onSelectedItemChange,
+            isItemDisabled,
             onHighlightedIndexChange: (changes) => {
                 setHighlightedIndex(changes.highlightedIndex);
-            },
-            isItemDisabled,
-            itemToString,
-            stateReducer: (
-                state: UseComboboxState<T>,
-                actionAndChanges: UseComboboxStateChangeOptions<T>,
-            ) => {
-                const {changes, type} = actionAndChanges;
-                switch (type) {
-                    case useCombobox.stateChangeTypes.InputKeyDownArrowDown:
-                        if (
-                            changes.highlightedIndex !== undefined &&
-                            changes.highlightedIndex < state.highlightedIndex
-                        ) {
-                            return {
-                                ...changes,
-                                highlightedIndex: state.highlightedIndex,
-                            };
-                        }
-                        return changes;
-                    case useCombobox.stateChangeTypes.InputKeyDownArrowUp:
-                        if (
-                            changes.highlightedIndex !== undefined &&
-                            changes.highlightedIndex > state.highlightedIndex
-                        ) {
-                            return {
-                                ...changes,
-                                highlightedIndex: state.highlightedIndex,
-                            };
-                        }
-                        return changes;
-                    default:
-                        return changes;
+                if (onHighlightedIndexChange) {
+                    onHighlightedIndexChange(changes);
                 }
             },
+            stateReducer: comboboxStateReducer,
+            ...comboboxProps,
         }),
     );
 
