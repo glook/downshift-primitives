@@ -13,7 +13,7 @@ import * as Radix from '@radix-ui/react-primitive';
 export interface DownshiftOptionProps<T extends unknown>
     extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     asChild?: boolean;
-    item: T;
+    rawValue: T;
     index: number;
 }
 
@@ -24,11 +24,11 @@ export const DownshiftOption = <T,>(
     const {getItemProps, highlightedIndex} = downshiftProps;
     const {selectedItemValue, getOptionValue} =
         useDownshiftListBoxContext('DownshiftOption');
-    const {item, index, children, asChild, ...rest} = props;
+    const {rawValue, index, children, asChild, ...rest} = props;
 
     const itemValue = useMemo(
-        () => getOptionValue(item),
-        [item, getOptionValue],
+        () => getOptionValue(rawValue),
+        [rawValue, getOptionValue],
     );
     const isSelected = useMemo(
         () => selectedItemValue === itemValue,
@@ -36,7 +36,7 @@ export const DownshiftOption = <T,>(
     );
 
     const itemProps = getItemProps({
-        item,
+        item: rawValue,
         index,
     });
 

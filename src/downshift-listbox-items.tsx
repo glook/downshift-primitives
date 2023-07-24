@@ -8,7 +8,7 @@ import {
 } from './downshiftComboboxContext';
 import type {LoadingState} from './interface';
 
-interface DownshiftListBoxValue<T> {
+export interface DownshiftListBoxValue<T> {
     value: string;
     rawValue: T;
     isSelected: boolean;
@@ -16,7 +16,7 @@ interface DownshiftListBoxValue<T> {
     isHighlighted: boolean;
 }
 
-interface DownshiftListBoxItemsChildrenProps<T> {
+export interface DownshiftListBoxItemsChildrenProps<T> {
     values: DownshiftListBoxValue<T>[];
     loadingState: LoadingState;
     inputValue?: string;

@@ -18,7 +18,7 @@ export const DownshiftInput = React.forwardRef<
     DownshiftInputElement,
     DownshiftInputProps
 >((props, ref): React.ReactElement | null => {
-    const {asChild, ...rest} = props;
+    const {asChild,placeholder, ...rest} = props;
     const {isDisabled} = useBaseDownshiftContext('DownshiftInput');
     const {isFocused, downshiftProps, setIsFocused} =
         useDownshiftComboboxContext('DownshiftInput');
@@ -33,6 +33,7 @@ export const DownshiftInput = React.forwardRef<
                 toggleMenu();
             }
         },
+        placeholder: !selectedItem ? placeholder : undefined,
         onFocusCapture: () => {
             setIsFocused(true);
         },

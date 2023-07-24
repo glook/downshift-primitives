@@ -38,8 +38,9 @@ const DownshiftComboboxSelectedItem = React.forwardRef<
     SelectedItemElement,
     SelectedItemProps
 >((props, ref): React.ReactElement => {
-    const {isFocused} = useDownshiftComboboxContext('DownshiftInput');
-    return <SelectedItem {...props} data-is-focused={isFocused} ref={ref} />;
+    const {isFocused,downshiftProps} = useDownshiftComboboxContext('DownshiftInput');
+    const {inputValue} = downshiftProps;
+    return <SelectedItem {...props} data-is-focused={isFocused} data-has-input-value={inputValue.length !== 0} ref={ref} />;
 });
 
 export const DownshiftSelectedItem = React.forwardRef<

@@ -1,7 +1,7 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 
 import {Slot} from '@radix-ui/react-slot';
-import React from 'react';
+import React, {useMemo} from 'react';
 
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
@@ -9,29 +9,46 @@ import * as Radix from '@radix-ui/react-primitive';
 
 export type DownshiftOptionStateElement = React.ElementRef<typeof Radix.Primitive.div>;
 
-export interface DownshiftOptionStateComponentProps
+export interface DownshiftOptionStateProps
     extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     forceMount?: boolean;
-}
-
-export interface DownshiftOptionStateProps
-    extends DownshiftOptionStateComponentProps {
-    isVisible: boolean;
+    type: 'loading' | 'loadingMore' | 'noResults' | 'error';
 }
 
 export const DownshiftOptionState = React.forwardRef<
     DownshiftOptionStateElement,
     DownshiftOptionStateProps
 >((props, ref): React.ReactElement | null => {
-    const {loadingState, downshiftProps} =
+    const {loadingState, downshiftProps, items} =
         useBaseDownshiftContext('DownshiftListBox');
     const isLoading = useIsDownshiftLoading();
     const {isOpen} = downshiftProps;
-    const {asChild, forceMount, isVisible, ...rest} = props;
+    const {asChild, forceMount, type, ...rest} = props;
+
+    const isVisible = useMemo<boolean>(() => {
+        if (isOpen) {
+            switch (type) {
+                case 'loading':
+                    return ['loading', 'sorting', 'filtering'].includes(
+                        loadingState,
+                    );
+                case 'loadingMore':
+                    return loadingState === 'loadingMore';
+                case 'noResults':
+                    return loadingState === 'idle' && items.length === 0;
+                case 'error':
+                    return loadingState === 'error';
+                default:
+                    return false;
+            }
+        }
+        return false;
+    }, [type, isOpen, loadingState]);
 
     if (!isVisible && !forceMount) {
         return null;
     }
+
     const Component = asChild ? Slot : 'div';
 
     return (
