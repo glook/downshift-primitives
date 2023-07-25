@@ -29,3 +29,5 @@ export const DownshiftArrow = React.forwardRef<
         </Component>
     );
 });
+
+export const Arrow = DownshiftArrow;

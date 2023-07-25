@@ -8,8 +8,8 @@ import {
     UseSelectReturnValue,
 } from 'downshift';
 import React from 'react';
-import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating.ts';
-import {LoadingState} from './interface.ts';
+import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating';
+import {LoadingState} from './interface';
 import * as Radix from '@radix-ui/react-primitive';
 
 interface DownshiftContext {

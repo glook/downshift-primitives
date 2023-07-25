@@ -10,7 +10,7 @@ import {
 import {useDownshiftAsyncList} from './hooks/useDownshiftAsyncList';
 import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating';
 import {objectFilterUndefinedValues} from './utils';
-import {DownshiftProps} from './interface.ts';
+import {DownshiftProps} from './interface';
 
 export interface DownshiftSelectProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
@@ -97,3 +97,5 @@ export const DownshiftSelect = <T, C>(
         </BaseDownshiftContextProvider>
     );
 };
+
+export const Select = DownshiftSelect;

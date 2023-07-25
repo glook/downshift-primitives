@@ -61,3 +61,5 @@ export const DownshiftOptionState = React.forwardRef<
         />
     );
 });
+
+export const OptionState = DownshiftOptionState;

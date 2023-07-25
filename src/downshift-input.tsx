@@ -19,7 +19,12 @@ export const DownshiftInput = React.forwardRef<
     DownshiftInputProps
 >((props, ref): React.ReactElement | null => {
     const {asChild,placeholder, ...rest} = props;
-    const {isDisabled} = useBaseDownshiftContext('DownshiftInput');
+    const {isDisabled,type} = useBaseDownshiftContext('DownshiftInput');
+
+    if(type !== 'combobox'){
+        return null;
+    }
+
     const {isFocused, downshiftProps, setIsFocused} =
         useDownshiftComboboxContext('DownshiftInput');
     const {selectedItem, getInputProps, toggleMenu, highlightedIndex, isOpen} =
@@ -58,3 +63,5 @@ export const DownshiftInput = React.forwardRef<
         />
     );
 });
+
+export const Input = DownshiftInput;

@@ -58,3 +58,5 @@ export const DownshiftOption = <T,>(
         </Component>
     );
 };
+
+export const Option = DownshiftOption;

@@ -1,7 +1,7 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 
 import type {AsyncListLoadOptions} from '@react-stately/data';
-import React from 'react';
+import React, {forwardRef} from 'react';
 
 import {DropdownMenuFloatingOptions} from './hooks/useDropdownMenuFloating';
 
@@ -38,3 +38,13 @@ export type LoadingState =
     | 'error'
     | 'idle'
     | 'filtering';
+
+// Declare a type that works with
+// generic components
+type FixedForwardRef = <T, P = {}>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactNode
+) => (props: P & React.RefAttributes<T>) => React.ReactNode;
+
+// Cast the old forwardRef to the new one
+export const fixedForwardRef =
+    forwardRef as FixedForwardRef;

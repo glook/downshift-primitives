@@ -9,21 +9,24 @@ import {
 } from './downshiftComboboxContext';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftSelectPlaceholderElement = React.ElementRef<typeof Radix.Primitive.span>;
+export type DownshiftPlaceholderElement = React.ElementRef<typeof Radix.Primitive.span>;
 
-export interface DownshiftSelectPlaceholderProps
+export interface DownshiftPlaceholderProps
     extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span>{
     asChild?: boolean;
     forceMount?: boolean;
 }
 
-export const DownshiftSelectPlaceholder = React.forwardRef<
-    DownshiftSelectPlaceholderElement,
-    DownshiftSelectPlaceholderProps
+export const DownshiftPlaceholder = React.forwardRef<
+    DownshiftPlaceholderElement,
+    DownshiftPlaceholderProps
 >((props, ref): React.ReactElement | null => {
-    const {isHovered} = useBaseDownshiftContext('DownshiftSelectPlaceholder');
+    const {isHovered,type} = useBaseDownshiftContext('DownshiftPlaceholder');
+    if(type !== 'select'){
+        return null;
+    }
     const {downshiftProps} = useDownshiftSelectContext(
-        'DownshiftSelectPlaceholder',
+        'DownshiftPlaceholder',
     );
     const {selectedItem} = downshiftProps;
     const {forceMount, asChild, style, ...rest} = props;
@@ -42,3 +45,5 @@ export const DownshiftSelectPlaceholder = React.forwardRef<
         />
     );
 });
+
+export const Placeholder = DownshiftPlaceholder;

@@ -110,3 +110,5 @@ export const DownshiftClear = React.forwardRef<
         type === 'combobox' ? DownshiftComboboxClear : DownshiftSelectClear;
     return <Component {...props} ref={ref} />;
 });
+
+export const Clear = DownshiftClear;

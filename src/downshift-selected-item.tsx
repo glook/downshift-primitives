@@ -12,7 +12,7 @@ export type SelectedItemElement = React.ElementRef<typeof Radix.Primitive.span>;
 export interface SelectedItemProps
     extends Omit<React.ComponentPropsWithoutRef<'span'>, 'children'> {}
 
-const SelectedItem = React.forwardRef<SelectedItemElement, SelectedItemProps>(
+const SelectSelectedItem = React.forwardRef<SelectedItemElement, SelectedItemProps>(
     (props, ref): React.ReactElement | null => {
         const {downshiftProps, renderSelectedItem} =
             useBaseDownshiftContext('SelectedItem');
@@ -34,13 +34,13 @@ const SelectedItem = React.forwardRef<SelectedItemElement, SelectedItemProps>(
     },
 );
 
-const DownshiftComboboxSelectedItem = React.forwardRef<
+const ComboboxSelectedItem = React.forwardRef<
     SelectedItemElement,
     SelectedItemProps
 >((props, ref): React.ReactElement => {
     const {isFocused,downshiftProps} = useDownshiftComboboxContext('DownshiftInput');
     const {inputValue} = downshiftProps;
-    return <SelectedItem {...props} data-is-focused={isFocused} data-has-input-value={inputValue.length !== 0} ref={ref} />;
+    return <SelectSelectedItem {...props} data-is-focused={isFocused} data-has-input-value={inputValue.length !== 0} ref={ref} />;
 });
 
 export const DownshiftSelectedItem = React.forwardRef<
@@ -49,7 +49,9 @@ export const DownshiftSelectedItem = React.forwardRef<
 >((props, ref): React.ReactElement | null => {
     const {type} = useBaseDownshiftContext('DownshiftInput');
     const Component =
-        type === 'combobox' ? DownshiftComboboxSelectedItem : SelectedItem;
+        type === 'combobox' ? ComboboxSelectedItem : SelectSelectedItem;
 
     return <Component {...props} data-type={type} ref={ref} />;
 });
+
+export const SelectedItem = DownshiftSelectedItem;

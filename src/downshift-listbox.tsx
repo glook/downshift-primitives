@@ -8,13 +8,15 @@ import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftListboxContainerElement = React.ElementRef<typeof Radix.Primitive.div>;
-export type DownshiftListboxContainerProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
+export type DownshiftListboxElement = React.ElementRef<
+    typeof Radix.Primitive.div
+>;
+export type DownshiftListboxProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
 
-export const DownshiftListboxContainer = React.forwardRef<
-    DownshiftListboxContainerElement,
-    DownshiftListboxContainerProps
->((props: DownshiftListboxContainerProps, ref): React.ReactElement => {
+export const DownshiftListbox = React.forwardRef<
+    DownshiftListboxElement,
+    DownshiftListboxProps
+>((props: DownshiftListboxProps, ref): React.ReactElement => {
     const isLoading = useIsDownshiftLoading();
     const {
         loadingState,
@@ -27,9 +29,9 @@ export const DownshiftListboxContainer = React.forwardRef<
     const {strategy, x, y} = dropdownMenuFloatingProps;
     const {children, style, asChild, ...rest} = props;
     const Component = asChild ? Slot : 'div';
-    const listboxRef = React.useRef<DownshiftListboxContainerElement>(null);
+    const listboxRef = React.useRef<DownshiftListboxElement>(null);
 
-    const menuProps = getMenuProps<DownshiftListboxContainerProps>({
+    const menuProps = getMenuProps<DownshiftListboxProps>({
         ref: mergeRefs(
             isOpen ? dropdownMenuFloatingProps.refs.setFloating : null,
             ref,
@@ -65,3 +67,5 @@ export const DownshiftListboxContainer = React.forwardRef<
         </Component>
     );
 });
+
+export const Listbox = DownshiftListbox;

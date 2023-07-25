@@ -36,3 +36,5 @@ export const DownshiftLoadingIndicator = React.forwardRef<
         />
     );
 });
+
+export const LoadingIndicator = DownshiftLoadingIndicator;

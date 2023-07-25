@@ -79,3 +79,5 @@ export const DownshiftTrigger = React.forwardRef<
 
     return <Component {...props} ref={ref} />;
 });
+
+export const Trigger = DownshiftTrigger;

@@ -18,3 +18,5 @@ export const DownshiftLabel = React.forwardRef<
     const Component = asChild ? Slot : 'label';
     return <Component {...getLabelProps(rest)} ref={ref} />;
 });
+
+export const Label = DownshiftLabel;

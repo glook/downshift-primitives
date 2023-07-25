@@ -83,3 +83,5 @@ export const DownshiftListBoxItems = <T,>(
         </DownshiftListBoxProvider>
     );
 };
+
+export const ListBoxItems = DownshiftListBoxItems;
