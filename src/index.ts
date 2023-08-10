@@ -15,8 +15,8 @@ export {DownshiftSelectedItem, SelectedItem} from './downshift-selected-item';
 export {DownshiftTrigger, Trigger} from './downshift-trigger';
 
 export type {
-    DownshiftAsyncListLoadReturn,
-    DownshiftAsyncListLoadState,
+    DownshiftGetItemsReturn,
+    DownshiftGetItemsState,
     DownshiftGetItemsFn,
 } from './interface';
 

@@ -30,12 +30,11 @@ export const useDownshiftAsyncList = <T, C>(
     const [localLoadingState, setLocalLoadingState] = useState<LoadingState>();
     const [isFirstLoadCalled, setIsFirstLoadCalled] = useState<boolean>(false);
     const asyncListProps = useAsyncList<T, C>({
-        load: async ({items, cursor = undefined, signal, filterText}) => {
+        load: async ({cursor = undefined, signal, filterText}) => {
             setLocalLoadingState(undefined);
             if (isFirstLoadCalled) {
                 return getItems(
                     {
-                        items,
                         signal,
                         filterText,
                     },
