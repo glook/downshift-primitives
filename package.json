@@ -1,6 +1,6 @@
 {
   "name": "@glook/downshift-primitives",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "",
   "license": "ISC",
   "author": "Andrey Polyakov",
@@ -15,20 +15,20 @@
     "dist"
   ],
   "dependencies": {
-    "@floating-ui/react-dom": "^2.0.0",
-    "@radix-ui/react-context": "^1.0.0",
+    "@floating-ui/react-dom": "^2.0.8",
+    "@radix-ui/react-context": "^1.0.1",
     "@radix-ui/react-primitive": "^1.0.3",
-    "@radix-ui/react-slot": "^1.0.1",
-    "@react-aria/utils": "^3.16.0",
-    "@react-stately/data": "^3.9.1",
-    "downshift": "^8.0.0",
-    "use-debounce": "^9.0.4"
+    "@radix-ui/react-slot": "^1.0.2",
+    "@react-aria/utils": "^3.23.2",
+    "@react-stately/data": "^3.11.2",
+    "downshift": "^8.4.0",
+    "use-debounce": "^10.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "prettier": "^3.0.0",
-    "tsup": "^7.1.0",
-    "typescript": "^5.1.6"
+    "@types/react": "^18.2.63",
+    "prettier": "^3.2.5",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "@types/react": "*",
