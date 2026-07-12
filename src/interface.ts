@@ -30,6 +30,8 @@ export interface DownshiftGetItemsReturn<Item, Cursor> {
     cursor?: Cursor;
 }
 
+export type DownshiftType = 'combobox' | 'select' | 'multi-combobox';
+
 export type LoadingState =
     | 'loading'
     | 'sorting'

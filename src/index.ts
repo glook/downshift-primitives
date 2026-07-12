@@ -1,7 +1,21 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 export {DownshiftArrow, Arrow} from './downshift-arrow';
+export {
+    DownshiftChip,
+    Chip,
+    DownshiftChipRemove,
+    ChipRemove,
+} from './downshift-chip';
 export {DownshiftClear, Clear} from './downshift-clear';
 export {DownshiftCombobox, Combobox} from './downshift-combobox';
+export {
+    DownshiftMultiCombobox,
+    MultiCombobox,
+} from './downshift-multi-combobox';
+export {
+    DownshiftSelectedItems,
+    SelectedItems,
+} from './downshift-selected-items';
 export {DownshiftInput, Input} from './downshift-input';
 export {DownshiftLabel, Label} from './downshift-label';
 export {DownshiftListbox, Listbox} from './downshift-listbox';
@@ -18,7 +32,20 @@ export type {
     DownshiftGetItemsReturn,
     DownshiftGetItemsState,
     DownshiftGetItemsFn,
+    DownshiftType,
 } from './interface';
+
+export type {
+    DownshiftChipProps,
+    DownshiftChipRemoveProps,
+    DownshiftChipRemoveElement,
+} from './downshift-chip';
+export type {DownshiftMultiComboboxProps} from './downshift-multi-combobox';
+export type {
+    DownshiftSelectedItemsProps,
+    DownshiftSelectedItemsChildrenProps,
+    DownshiftSelectedItemValue,
+} from './downshift-selected-items';
 
 export type {DownshiftArrowProps} from './downshift-arrow';
 export type {DownshiftClearElement,DownshiftClearProps} from './downshift-clear';

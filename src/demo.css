@@ -1,0 +1,168 @@
+/*
+ * Created by: Andrey Polyakov (andrey@polyakov.im)
+ *
+ * Demo styles for Storybook stories, not part of the package. The primitives ship
+ * unstyled - this file shows how to hang an appearance on their data-attributes.
+ */
+
+.DemoRoot {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    max-width: 420px;
+    color: #1f2933;
+}
+
+/* Trigger - the field container. data-is-open / data-is-disabled come from the primitive */
+.ComboboxTrigger {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    min-height: 38px;
+    padding: 4px 8px;
+    background: #fff;
+    border: 1px solid #cbd2d9;
+    border-radius: 6px;
+    cursor: text;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.ComboboxTrigger:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    outline: none;
+}
+
+.ComboboxTrigger[data-is-open='true'] {
+    border-color: #6366f1;
+}
+
+.ComboboxTrigger[data-is-disabled='true'] {
+    background: #f5f7fa;
+    cursor: not-allowed;
+}
+
+.ComboboxInput {
+    flex: 1 1 80px;
+    min-width: 80px;
+    padding: 4px 0;
+    color: inherit;
+    font: inherit;
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.ComboboxSelectedItem {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ComboboxPlaceholder {
+    flex: 1;
+    color: #9aa5b1;
+}
+
+/* Indicators on the right: arrow, clear, loading */
+.ComboboxIndicators {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+}
+
+.ComboboxArrow {
+    color: #9aa5b1;
+    transition: transform 0.2s;
+}
+
+.ComboboxArrow[data-is-open='true'] {
+    transform: rotate(180deg);
+}
+
+.ComboboxClear {
+    color: #9aa5b1;
+    cursor: pointer;
+}
+
+.ComboboxClear:hover {
+    color: #52606d;
+}
+
+/* Listbox: visibility is driven by data-is-open, position - by floating-ui */
+.ComboboxListbox {
+    z-index: 10;
+    max-height: 260px;
+    margin: 0;
+    padding: 4px;
+    overflow-y: auto;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #e4e7eb;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.ComboboxListbox[data-is-open='false'] {
+    display: none;
+}
+
+/* Option: data-is-active - highlighted with the keyboard, data-is-selected - selected */
+.ComboboxOption {
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.ComboboxOption[data-is-active='true'] {
+    background: #eef2ff;
+}
+
+.ComboboxOption[data-is-selected='true'] {
+    font-weight: 500;
+    color: #4338ca;
+}
+
+.ComboboxOption[data-is-disabled='true'] {
+    color: #9aa5b1;
+    cursor: not-allowed;
+}
+
+.ComboboxMessage {
+    padding: 6px 10px;
+    color: #7b8794;
+}
+
+/* Chip: a pill for a selected value in MultiCombobox.
+   data-is-active - the chip picked with the keyboard (arrows / Backspace) */
+.ComboboxChip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 2px 8px;
+    color: #3730a3;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    border-radius: 999px;
+    line-height: 1.5;
+}
+
+.ComboboxChip[data-is-active='true'] {
+    background: #c7d2fe;
+    font-weight: 500;
+}
+
+.ComboboxChipRemove {
+    order: -1;
+    color: #6366f1;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.ComboboxChipRemove:hover {
+    opacity: 1;
+}

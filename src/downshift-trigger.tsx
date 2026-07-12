@@ -25,23 +25,34 @@ const DownshiftSelectTrigger = React.forwardRef<
         dropdownMenuFloatingProps,
         isHovered,
         isLoading,
+        hasSelectedItem,
         type,
     } = useBaseDownshiftContext('DownshiftTrigger');
     const {asChild, ...rest} = props;
-    const {getToggleButtonProps, highlightedIndex, isOpen} = downshiftProps;
+    const {getToggleButtonProps, openMenu, highlightedIndex, isOpen} =
+        downshiftProps;
 
     const containerProps = getToggleButtonProps({
         ref: mergeRefs<any>(dropdownMenuFloatingProps.refs.setReference, ref),
         onMouseEnter: () => setIsHovered(true),
         onMouseLeave: () => setIsHovered(false),
         disabled: isDisabled,
+        // In the combobox modes the click only opens the menu: a click on the nested
+        // Input bubbles up here, and a toggle would collapse the menu it just opened
+        onClick:
+            type === 'select'
+                ? undefined
+                : (event) => {
+                      preventDownshiftDefault(event);
+                      openMenu();
+                  },
         onKeyDown: (event) => {
             if (event.key === 'ArrowUp' && highlightedIndex === -1) {
                 preventDownshiftDefault(event);
             }
         },
     });
-    const Component = asChild ? Slot : type === 'combobox' ? 'span' : 'button';
+    const Component = asChild ? Slot : type === 'select' ? 'button' : 'span';
 
     return (
         <Component
@@ -50,7 +61,7 @@ const DownshiftSelectTrigger = React.forwardRef<
             data-is-hovered={isHovered}
             data-is-open={isOpen}
             data-is-loading={isLoading}
-            data-has-item={!!downshiftProps.selectedItem}
+            data-has-item={hasSelectedItem ?? !!downshiftProps.selectedItem}
         />
     );
 });
@@ -75,7 +86,7 @@ export const DownshiftTrigger = React.forwardRef<
 >((props, ref): React.ReactElement => {
     const {type} = useBaseDownshiftContext('DownshiftTrigger');
     const Component =
-        type === 'combobox' ? DownshiftComboboxTrigger : DownshiftSelectTrigger;
+        type === 'select' ? DownshiftSelectTrigger : DownshiftComboboxTrigger;
 
     return <Component {...props} ref={ref} />;
 });

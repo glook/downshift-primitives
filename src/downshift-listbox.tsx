@@ -47,7 +47,6 @@ export const DownshiftListbox = React.forwardRef<
         ...mergeProps(rest, listBoxProps),
     });
 
-    // If the value in the input changes, scroll the list up
     useEffect(() => {
         if (listboxRef.current) {
             listboxRef.current.scrollTop = 0;
