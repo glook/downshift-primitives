@@ -48,6 +48,12 @@ export const DownshiftSelectedItem = React.forwardRef<
     SelectedItemProps
 >((props, ref): React.ReactElement | null => {
     const {type} = useBaseDownshiftContext('DownshiftInput');
+
+    // in multi-combobox the selected values are rendered as chips (SelectedItems)
+    if (type === 'multi-combobox') {
+        return null;
+    }
+
     const Component =
         type === 'combobox' ? ComboboxSelectedItem : SelectSelectedItem;
 

@@ -4,12 +4,13 @@ import {createContext} from '@radix-ui/react-context';
 import {
     UseComboboxProps,
     UseComboboxReturnValue,
+    UseMultipleSelectionReturnValue,
     UseSelectProps,
     UseSelectReturnValue,
 } from 'downshift';
 import React from 'react';
 import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating';
-import {LoadingState} from './interface';
+import {DownshiftType, LoadingState} from './interface';
 import * as Radix from '@radix-ui/react-primitive';
 
 interface DownshiftContext {
@@ -22,17 +23,36 @@ interface DownshiftContext {
     setIsHovered: (value: boolean) => void;
     dropdownMenuFloatingProps: ReturnType<typeof useDropdownMenuFloating>;
     downshiftProps: UseComboboxReturnValue<any> | UseSelectReturnValue<any>;
-    type: 'combobox' | 'select';
+    type: DownshiftType;
     renderSelectedItem: (value: any) => React.ReactNode;
     isItemDisabled?:
         | UseSelectProps<any>['isItemDisabled']
         | UseComboboxProps<any>['isItemDisabled'];
+    // whether a value is selected: in multi-combobox that means a non-empty chip list
+    hasSelectedItem?: boolean;
 }
 
 interface DownshiftComboboxContext {
     isFocused?: boolean;
     setIsFocused: (value: boolean) => void;
     downshiftProps: UseComboboxReturnValue<any>;
+}
+
+interface DownshiftMultiComboboxContext {
+    selectedItems: any[];
+    activeIndex: number;
+    // required in multi-combobox: items are compared by it. In the other modes
+    // getOptionValue comes as a ListBoxItems prop rather than through context
+    getOptionValue: (value: any) => string;
+    getSelectedItemProps: UseMultipleSelectionReturnValue<any>['getSelectedItemProps'];
+    getDropdownProps: UseMultipleSelectionReturnValue<any>['getDropdownProps'];
+    removeSelectedItem: UseMultipleSelectionReturnValue<any>['removeSelectedItem'];
+}
+
+interface DownshiftChipContext {
+    rawValue: unknown;
+    index: number;
+    isActive: boolean;
 }
 
 interface DownshiftSelectContext {
@@ -49,6 +69,16 @@ export const [BaseDownshiftContextProvider, useBaseDownshiftContext] =
 
 export const [DownshiftComboboxProvider, useDownshiftComboboxContext] =
     createContext<DownshiftComboboxContext>('DownshiftComboboxContext');
+
+export const [
+    DownshiftMultiComboboxProvider,
+    useDownshiftMultiComboboxContext,
+] = createContext<DownshiftMultiComboboxContext>(
+    'DownshiftMultiComboboxContext',
+);
+
+export const [DownshiftChipProvider, useDownshiftChipContext] =
+    createContext<DownshiftChipContext>('DownshiftChipContext');
 
 export const [DownshiftSelectProvider, useDownshiftSelectContext] =
     createContext<DownshiftSelectContext>('DownshiftSelectContext');

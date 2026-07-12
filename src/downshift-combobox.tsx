@@ -1,20 +1,17 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 
-import {
-    useCombobox,
-    UseComboboxProps,
-    UseComboboxState,
-    UseComboboxStateChangeOptions,
-} from 'downshift';
-import React, {useCallback, useEffect, useState} from 'react';
-import {useDebounce} from 'use-debounce';
+import {useCombobox, UseComboboxProps} from 'downshift';
+import React, {useState} from 'react';
 
 import {
     BaseDownshiftContextProvider,
     DownshiftComboboxProvider,
 } from './downshiftComboboxContext';
 import {useDownshiftAsyncList} from './hooks/useDownshiftAsyncList';
-import {useDropdownMenuFloating} from './hooks/useDropdownMenuFloating';
+import {
+    useComboboxStateReducer,
+    useDownshiftComboboxCore,
+} from './hooks/useDownshiftComboboxCore';
 import {objectFilterUndefinedValues} from './utils';
 import {DownshiftProps} from './interface';
 
@@ -58,45 +55,7 @@ export const DownshiftCombobox = <T, C>(
         listBoxProps,
     } = useDownshiftAsyncList({...props, highlightedIndex});
 
-    const comboboxStateReducer = useCallback(
-        (
-            state: UseComboboxState<T>,
-            actionAndChanges: UseComboboxStateChangeOptions<T>,
-        ): Partial<UseComboboxState<T>> => {
-            const {type} = actionAndChanges;
-            const changes = stateReducer
-                ? stateReducer(state, actionAndChanges)
-                : actionAndChanges.changes;
-            // disable circular navigation
-            switch (type) {
-                case useCombobox.stateChangeTypes.InputKeyDownArrowDown:
-                    if (
-                        changes.highlightedIndex !== undefined &&
-                        changes.highlightedIndex < state.highlightedIndex
-                    ) {
-                        return {
-                            ...changes,
-                            highlightedIndex: state.highlightedIndex,
-                        };
-                    }
-                    return changes;
-                case useCombobox.stateChangeTypes.InputKeyDownArrowUp:
-                    if (
-                        changes.highlightedIndex !== undefined &&
-                        changes.highlightedIndex > state.highlightedIndex
-                    ) {
-                        return {
-                            ...changes,
-                            highlightedIndex: state.highlightedIndex,
-                        };
-                    }
-                    return changes;
-                default:
-                    return changes;
-            }
-        },
-        [stateReducer],
-    );
+    const comboboxStateReducer = useComboboxStateReducer<T>(stateReducer);
 
     const comboboxMethods = useCombobox(
         objectFilterUndefinedValues<UseComboboxProps<T>>({
@@ -114,31 +73,14 @@ export const DownshiftCombobox = <T, C>(
         }),
     );
 
-    const {isOpen, toggleMenu, inputValue} = comboboxMethods;
-    const [debouncedFilter] = useDebounce(inputValue, debounceTime);
-
-    useEffect(() => {
-        setFilterText(debouncedFilter);
-    }, [debouncedFilter]);
-
-    useEffect(() => {
-        if (isInputFocused && !isOpen) {
-            toggleMenu();
-        }
-    }, [isInputFocused]);
-
-    useEffect(() => {
-        if (isOpen) {
-            setFilterText(inputValue);
-        } else {
-            clearItems();
-        }
-    }, [isOpen]);
-
-    const dropdownMenuFloatingProps = useDropdownMenuFloating(
-        isOpen,
+    const dropdownMenuFloatingProps = useDownshiftComboboxCore<T>({
+        comboboxMethods,
+        setFilterText,
+        clearItems,
+        isInputFocused,
+        debounceTime,
         dropdownMenuFloatingOptions,
-    );
+    });
 
     const [isHovered, setIsHovered] = useState<boolean>(false);
     return (
@@ -155,6 +97,7 @@ export const DownshiftCombobox = <T, C>(
             type={'combobox'}
             renderSelectedItem={renderSelectedItem}
             isItemDisabled={isItemDisabled}
+            hasSelectedItem={!!comboboxMethods.selectedItem}
         >
             <DownshiftComboboxProvider
                 downshiftProps={comboboxMethods}

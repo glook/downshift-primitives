@@ -9,6 +9,7 @@ import {
     useFloating,
     UseFloatingOptions,
 } from '@floating-ui/react-dom';
+import {useMemo} from 'react';
 
 export interface DropdownMenuFloatingOptions
     extends Pick<UseFloatingOptions, 'placement'> {
@@ -23,8 +24,11 @@ export const useDropdownMenuFloating = (
     const placement = options?.placement ?? 'bottom-start';
     const offsetValue = options?.offset ?? 5;
     const applyWidth = options?.applyWidth ?? true;
-    return useFloating({
-        middleware: [
+
+    // without memoization a fresh middleware array on every render makes
+    // useFloating update its state - and the renders loop forever
+    const middleware = useMemo<UseFloatingOptions['middleware']>(
+        () => [
             offset(offsetValue),
             flip(),
             shift(),
@@ -42,17 +46,47 @@ export const useDropdownMenuFloating = (
                             '--list-box-available-height',
                             `${options.availableHeight}px`,
                         );
-                        if(applyWidth) {
+                        if (applyWidth) {
                             floatingElement.style.width = `${rectWidth}px`;
-                            floatingElement.style.maxWidth = `${rectWidth * 1.5}px`;
+                            floatingElement.style.maxWidth = `${
+                                rectWidth * 1.5
+                            }px`;
                         }
-
                     }
                 },
             }),
         ],
+        [offsetValue, applyWidth],
+    );
+
+    const floating = useFloating({
+        middleware,
         placement,
         whileElementsMounted: autoUpdate,
         open: isOpen,
     });
+
+    const {setReference, setFloating} = floating.refs;
+
+    // Trigger and Listbox hand over unstable ref callbacks, so React detaches them
+    // with null on every render - and floating-ui loops on null. Guard below; see
+    // docs/adr/0002-floating-refs-null-guard.md.
+    const refs = useMemo(
+        () => ({
+            ...floating.refs,
+            setReference: (node: Element | null) => {
+                if (node) {
+                    setReference(node);
+                }
+            },
+            setFloating: (node: HTMLElement | null) => {
+                if (node) {
+                    setFloating(node);
+                }
+            },
+        }),
+        [floating.refs, setReference, setFloating],
+    );
+
+    return {...floating, refs};
 };
