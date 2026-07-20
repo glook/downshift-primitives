@@ -6,6 +6,7 @@ import {describe, expect, test, vi} from 'vitest';
 
 import {
     CITIES,
+    City,
     createDeferredGetItems,
     createGetItemsMock,
     createPaginatedGetItemsMock,
