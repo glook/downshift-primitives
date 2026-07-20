@@ -270,7 +270,7 @@ describe('DownshiftMultiCombobox', () => {
             expect(getItemsMock).toHaveBeenCalledTimes(1);
             expect(getItemsMock).toHaveBeenLastCalledWith(
                 expect.objectContaining({filterText: 'ber'}),
-                null,
+                undefined,
             );
         } finally {
             vi.useRealTimers();

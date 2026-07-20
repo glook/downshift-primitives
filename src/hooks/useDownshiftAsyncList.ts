@@ -1,6 +1,7 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 
 import {AsyncListData, useAsyncList} from '@react-stately/data';
+import * as React from 'react';
 import {useEffect, useMemo, useState} from 'react';
 
 import {DownshiftProps, LoadingState} from '../interface';
@@ -19,7 +20,7 @@ interface UseDownshiftAsyncListProps<T, C>
 interface useDownShiftAsyncListReturn<T> extends AsyncListData<T> {
     load: () => void;
     clearItems: () => void;
-    listBoxProps: Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
+    listBoxProps: React.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
 }
 
 export const useDownshiftAsyncList = <T, C>(

@@ -14,7 +14,7 @@ export type DownshiftPlaceholderElement = React.ElementRef<
 >;
 
 export interface DownshiftPlaceholderProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     asChild?: boolean;
     forceMount?: boolean;
 }

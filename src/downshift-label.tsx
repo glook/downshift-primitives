@@ -8,7 +8,7 @@ import * as Radix from '@radix-ui/react-primitive';
 export type DownshiftLabelElement = React.ElementRef<
     typeof Radix.Primitive.label
 >;
-export type DownshiftLabelProps = Radix.ComponentPropsWithoutRef<
+export type DownshiftLabelProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.label
 >;
 

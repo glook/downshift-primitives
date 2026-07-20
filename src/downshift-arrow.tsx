@@ -9,7 +9,7 @@ import * as Radix from '@radix-ui/react-primitive';
 export type DownshiftArrowElement = React.ElementRef<
     typeof Radix.Primitive.span
 >;
-export type DownshiftArrowProps = Radix.ComponentPropsWithoutRef<
+export type DownshiftArrowProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.span
 >;
 

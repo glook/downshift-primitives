@@ -15,7 +15,7 @@ import {Slot} from '@radix-ui/react-slot';
 export type DownshiftInputElement = React.ElementRef<
     typeof Radix.Primitive.input
 >;
-export type DownshiftInputProps = Radix.ComponentPropsWithoutRef<
+export type DownshiftInputProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.input
 >;
 

@@ -12,7 +12,7 @@ export type DownshiftOptionStateElement = React.ElementRef<
 >;
 
 export interface DownshiftOptionStateProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     forceMount?: boolean;
     type: 'loading' | 'loadingMore' | 'noResults' | 'error';
 }

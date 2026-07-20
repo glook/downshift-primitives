@@ -66,7 +66,7 @@ describe('DownshiftCombobox', () => {
             // @react-stately/data.
             expect(getItemsMock).toHaveBeenLastCalledWith(
                 expect.objectContaining({filterText: 'Berlin'}),
-                null,
+                undefined,
             ),
         );
         await waitFor(() => {
@@ -212,7 +212,7 @@ describe('DownshiftCombobox', () => {
             expect(getItemsMock).toHaveBeenCalledTimes(1);
             expect(getItemsMock).toHaveBeenLastCalledWith(
                 expect.objectContaining({filterText: 'ber'}),
-                null,
+                undefined,
             );
         } finally {
             vi.useRealTimers();

@@ -10,7 +10,7 @@ export type DownshiftLoadingIndicatorElement = React.ElementRef<
 >;
 
 export interface DownshiftLoadingIndicatorProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     forceMount?: boolean;
     children: React.ReactNode;
 }

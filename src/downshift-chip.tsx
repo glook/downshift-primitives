@@ -15,7 +15,7 @@ import * as Radix from '@radix-ui/react-primitive';
 // Chip is generic (rawValue: T), hence no forwardRef: React.forwardRef loses the
 // generic parameter. Consumers can still reach the ref through asChild.
 export interface DownshiftChipProps<T>
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     rawValue: T;
     index: number;
 }
@@ -54,7 +54,7 @@ export type DownshiftChipRemoveElement = React.ElementRef<
 >;
 
 export interface DownshiftChipRemoveProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     forceMount?: boolean;
 }
 

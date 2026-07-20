@@ -16,7 +16,7 @@ export type DownshiftClearElement = React.ElementRef<
 >;
 
 export interface DownshiftClearProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     forceMount?: boolean;
     showOnHover?: boolean;
 }

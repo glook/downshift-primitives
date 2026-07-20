@@ -11,7 +11,7 @@ import * as Radix from '@radix-ui/react-primitive';
 export type DownshiftListboxElement = React.ElementRef<
     typeof Radix.Primitive.div
 >;
-export type DownshiftListboxProps = Radix.ComponentPropsWithoutRef<
+export type DownshiftListboxProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.div
 >;
 
@@ -34,11 +34,14 @@ export const DownshiftListbox = React.forwardRef<
     const listboxRef = React.useRef<DownshiftListboxElement>(null);
 
     const menuProps = getMenuProps<DownshiftListboxProps>({
+        // mergeRefs returns Ref<T | null> for React 19 compatibility, which
+        // @types/react@18 rejects as a LegacyRef<T> - the cast keeps a single
+        // source that typechecks on both.
         ref: mergeRefs(
             isOpen ? dropdownMenuFloatingProps.refs.setFloating : null,
             ref,
             listboxRef,
-        ),
+        ) as React.Ref<DownshiftListboxElement>,
 
         style: {
             position: strategy,
