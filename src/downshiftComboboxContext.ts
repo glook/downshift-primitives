@@ -47,6 +47,9 @@ interface DownshiftMultiComboboxContext {
     getSelectedItemProps: UseMultipleSelectionReturnValue<any>['getSelectedItemProps'];
     getDropdownProps: UseMultipleSelectionReturnValue<any>['getDropdownProps'];
     removeSelectedItem: UseMultipleSelectionReturnValue<any>['removeSelectedItem'];
+    // removeSelectedItem drops one item at a time; Clear needs to replace the
+    // whole list at once, which only the consumer's onChange can do
+    onChange: (items: any[]) => void;
 }
 
 interface DownshiftChipContext {

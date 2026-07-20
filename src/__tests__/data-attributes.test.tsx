@@ -257,7 +257,7 @@ describe('data-attribute contract', () => {
                 "arrow": {
                   "data-is-open": "true",
                 },
-                "clear": null,
+                "clear": {},
                 "firstChip": {
                   "data-is-active": "false",
                 },
@@ -294,14 +294,12 @@ describe('data-attribute contract', () => {
             expect(getSelectedItemProbe()).toBeNull();
         });
 
-        // Known limitation, pinned so it cannot change silently: useCombobox is fed
-        // a controlled `selectedItem: null`, and the Clear dispatcher routes
-        // non-combobox roots to the Select branch, which gates on that same
-        // `selectedItem`. Clear is therefore inert here no matter how many chips
-        // exist - removal goes through ChipRemove or Backspace instead.
-        test('Clear never renders, even with chips selected', async () => {
+        // Regression: Clear used to route through the Select branch, which gates on
+        // downshift's own `selectedItem` - permanently null here because useCombobox
+        // is fed a controlled `selectedItem: null`. It never rendered at all.
+        test('Clear appears once chips exist and removes all of them', async () => {
             const user = userEvent.setup();
-            const {getInput, getOptions, getChips, getClear} =
+            const {getInput, getOptions, getChips, getClear, onChange} =
                 renderMultiCombobox();
 
             expect(getClear()).toBeNull();
@@ -309,11 +307,35 @@ describe('data-attribute contract', () => {
             await user.click(getInput());
             await waitFor(() => expect(getOptions().length).toBeGreaterThan(0));
             await user.click(
-                getOptions().find((option) => option.textContent === 'Berlin')!,
+                getOptions().find((option) => option.textContent === 'London')!,
             );
             await waitFor(() => expect(getChips()).toHaveLength(1));
+            await user.click(
+                getOptions().find((option) => option.textContent === 'Paris')!,
+            );
+            await waitFor(() => expect(getChips()).toHaveLength(2));
 
+            const clear = getClear();
+            expect(clear).not.toBeNull();
+            await user.click(clear!);
+
+            await waitFor(() => expect(getChips()).toHaveLength(0));
+            expect(onChange).toHaveBeenLastCalledWith([]);
             expect(getClear()).toBeNull();
+        });
+
+        test('Clear also shows for input text alone, without any chip', async () => {
+            const user = userEvent.setup();
+            const {getInput, getChips, getClear} = renderMultiCombobox();
+
+            await user.click(getInput());
+            await user.type(getInput(), 'Ber');
+            await waitFor(() => expect(getClear()).not.toBeNull());
+
+            await user.click(getClear()!);
+
+            await waitFor(() => expect(getInput().value).toBe(''));
+            expect(getChips()).toHaveLength(0);
         });
     });
 

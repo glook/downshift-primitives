@@ -210,6 +210,7 @@ export const DownshiftMultiCombobox = <T, C>(
                     getSelectedItemProps={getSelectedItemProps}
                     getDropdownProps={getDropdownProps}
                     removeSelectedItem={removeSelectedItem}
+                    onChange={onChange}
                 >
                     {children}
                 </DownshiftMultiComboboxProvider>

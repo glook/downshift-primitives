@@ -6,6 +6,7 @@ import React from 'react';
 import {
     useBaseDownshiftContext,
     useDownshiftComboboxContext,
+    useDownshiftMultiComboboxContext,
 } from './downshiftComboboxContext';
 import {mergeProps} from '@react-aria/utils';
 import * as Radix from '@radix-ui/react-primitive';
@@ -101,14 +102,54 @@ const DownshiftComboboxClear = React.forwardRef<
     );
 });
 
+const DownshiftMultiComboboxClear = React.forwardRef<
+    DownshiftClearElement,
+    DownshiftClearProps
+>((props: DownshiftClearProps, ref): React.ReactElement | null => {
+    const {downshiftProps} = useDownshiftComboboxContext('DownshiftClear');
+    const {selectedItems, onChange} =
+        useDownshiftMultiComboboxContext('DownshiftClear');
+    const {inputValue} = downshiftProps;
+
+    // useCombobox is fed a controlled `selectedItem: null` here, so the chip list
+    // - not downshift's own selection - decides whether there is anything to clear
+    const showClear = selectedItems.length > 0 || inputValue.length > 0;
+
+    if (!showClear) {
+        return null;
+    }
+
+    return (
+        <BaseDownshiftClear
+            {...mergeProps(
+                {
+                    onClick: () => {
+                        if (selectedItems.length > 0) {
+                            onChange([]);
+                        }
+                    },
+                },
+                props,
+            )}
+            ref={ref}
+        />
+    );
+});
+
 export const DownshiftClear = React.forwardRef<
     DownshiftClearElement,
     DownshiftClearProps
 >((props: DownshiftClearProps, ref): React.ReactElement | null => {
     const {type} = useBaseDownshiftContext('DownshiftClear');
-    const Component =
-        type === 'combobox' ? DownshiftComboboxClear : DownshiftSelectClear;
-    return <Component {...props} ref={ref} />;
+
+    switch (type) {
+        case 'combobox':
+            return <DownshiftComboboxClear {...props} ref={ref} />;
+        case 'multi-combobox':
+            return <DownshiftMultiComboboxClear {...props} ref={ref} />;
+        default:
+            return <DownshiftSelectClear {...props} ref={ref} />;
+    }
 });
 
 export const Clear = DownshiftClear;
