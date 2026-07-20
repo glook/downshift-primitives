@@ -11,7 +11,7 @@ import {
 import * as Radix from '@radix-ui/react-primitive';
 
 export interface DownshiftOptionProps<T extends unknown>
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     asChild?: boolean;
     rawValue: T;
     index: number;

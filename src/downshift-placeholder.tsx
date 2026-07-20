@@ -9,12 +9,10 @@ import {
 } from './downshiftComboboxContext';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftPlaceholderElement = React.ElementRef<
-    typeof Radix.Primitive.span
->;
+export type DownshiftPlaceholderElement = HTMLSpanElement;
 
 export interface DownshiftPlaceholderProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {
     asChild?: boolean;
     forceMount?: boolean;
 }

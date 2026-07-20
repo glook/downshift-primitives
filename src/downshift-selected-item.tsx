@@ -8,7 +8,7 @@ import {
 } from './downshiftComboboxContext';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type SelectedItemElement = React.ElementRef<typeof Radix.Primitive.span>;
+export type SelectedItemElement = HTMLSpanElement;
 export interface SelectedItemProps
     extends Omit<React.ComponentPropsWithoutRef<'span'>, 'children'> {}
 

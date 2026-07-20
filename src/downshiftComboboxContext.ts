@@ -14,7 +14,7 @@ import {DownshiftType, LoadingState} from './interface';
 import * as Radix from '@radix-ui/react-primitive';
 
 interface DownshiftContext {
-    listBoxProps: Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
+    listBoxProps: React.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
     items: unknown[];
     loadingState: LoadingState;
     isLoading?: boolean;

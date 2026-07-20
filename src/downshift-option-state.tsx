@@ -7,12 +7,10 @@ import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftOptionStateElement = React.ElementRef<
-    typeof Radix.Primitive.div
->;
+export type DownshiftOptionStateElement = HTMLDivElement;
 
 export interface DownshiftOptionStateProps
-    extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
+    extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     forceMount?: boolean;
     type: 'loading' | 'loadingMore' | 'noResults' | 'error';
 }

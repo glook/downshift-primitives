@@ -12,10 +12,8 @@ import {preventDownshiftDefault} from './utils';
 import type * as Radix from '@radix-ui/react-primitive';
 import {Slot} from '@radix-ui/react-slot';
 
-export type DownshiftInputElement = React.ElementRef<
-    typeof Radix.Primitive.input
->;
-export type DownshiftInputProps = Radix.ComponentPropsWithoutRef<
+export type DownshiftInputElement = HTMLInputElement;
+export type DownshiftInputProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.input
 >;
 

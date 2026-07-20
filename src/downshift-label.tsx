@@ -5,10 +5,8 @@ import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {Slot} from '@radix-ui/react-slot';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftLabelElement = React.ElementRef<
-    typeof Radix.Primitive.label
->;
-export type DownshiftLabelProps = Radix.ComponentPropsWithoutRef<
+export type DownshiftLabelElement = HTMLLabelElement;
+export type DownshiftLabelProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.label
 >;
 
