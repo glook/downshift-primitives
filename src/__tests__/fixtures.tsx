@@ -59,6 +59,32 @@ export const createGetItemsMock = (items: City[] = CITIES): CityGetItems =>
         return {items: filtered};
     }) as unknown as CityGetItems;
 
+/** Paginated getItems: each page has `pageSize` items, cursor advances until exhausted. */
+export const createPaginatedGetItemsMock = (
+    items: City[] = CITIES,
+    pageSize = 2,
+): CityGetItems =>
+    vi.fn(async ({filterText}, cursor) => {
+        const page = (cursor as number | null) ?? 0;
+        const query = (filterText ?? '').trim().toLowerCase();
+        const filtered = query
+            ? items.filter((city) => city.name.toLowerCase().includes(query))
+            : items;
+        const pageItems = filtered.slice(
+            page * pageSize,
+            (page + 1) * pageSize,
+        );
+        return {
+            items: pageItems,
+            cursor:
+                (page + 1) * pageSize < filtered.length ? page + 1 : undefined,
+        };
+    }) as unknown as CityGetItems;
+
+/** Flushes pending microtasks (e.g. the swallowed first `useAsyncList` load). */
+export const flush = (): Promise<void> =>
+    new Promise((resolve) => setTimeout(resolve, 0));
+
 export interface DeferredGetItems<T, C> {
     getItems: DownshiftGetItemsFn<T, C>;
     resolveNext: (value: DownshiftGetItemsReturn<T, C>) => void;
@@ -257,6 +283,8 @@ export interface SelectHarness extends RenderResult {
     getPlaceholder: () => HTMLElement | null;
     getSelectedItem: () => HTMLElement | null;
     getOptions: () => HTMLLIElement[];
+    getClear: () => HTMLElement | null;
+    getMessage: (type: MessageType) => HTMLElement | null;
     /** Branch-dispatcher probe: Input must return null inside a select tree. */
     getInputProbe: () => HTMLElement | null;
 }
@@ -287,6 +315,7 @@ export const renderSelect = (
                     </Placeholder>
                     <SelectedItem className={'ComboboxSelectedItem'} />
                     <span className={'ComboboxIndicators'}>
+                        <Clear className={'ComboboxClear'} />
                         <Arrow className={'ComboboxArrow'}>▾</Arrow>
                     </span>
                     <Input className={'BranchProbeInput'} />
@@ -310,8 +339,30 @@ export const renderSelect = (
                                     </Option>
                                 ))}
                                 <OptionState type={'loading'} asChild={true}>
-                                    <li className={'ComboboxMessage'}>
+                                    <li
+                                        className={
+                                            'ComboboxMessage ComboboxMessage--loading'
+                                        }
+                                    >
                                         Loading...
+                                    </li>
+                                </OptionState>
+                                <OptionState type={'noResults'} asChild={true}>
+                                    <li
+                                        className={
+                                            'ComboboxMessage ComboboxMessage--noResults'
+                                        }
+                                    >
+                                        Nothing found
+                                    </li>
+                                </OptionState>
+                                <OptionState type={'error'} asChild={true}>
+                                    <li
+                                        className={
+                                            'ComboboxMessage ComboboxMessage--error'
+                                        }
+                                    >
+                                        Error
                                     </li>
                                 </OptionState>
                             </>
@@ -332,6 +383,8 @@ export const renderSelect = (
         getPlaceholder: () => qs(container, '.ComboboxPlaceholder'),
         getSelectedItem: () => qs(container, '.ComboboxSelectedItem'),
         getOptions: () => qsAll<HTMLLIElement>(container, '.ComboboxOption'),
+        getClear: () => qs(container, '.ComboboxClear'),
+        getMessage: (type) => qs(container, `.ComboboxMessage--${type}`),
         getInputProbe: () => qs(container, '.BranchProbeInput'),
     };
 };
@@ -344,6 +397,8 @@ export interface MultiComboboxHarness extends RenderResult {
     getListbox: () => HTMLElement;
     getOptions: () => HTMLLIElement[];
     getChips: () => HTMLElement[];
+    getChipRemoves: () => HTMLElement[];
+    getMessage: (type: MessageType) => HTMLElement | null;
 }
 
 export type RenderMultiComboboxOptions = Partial<
@@ -434,8 +489,33 @@ export const renderMultiCombobox = (
                                         type={'loading'}
                                         asChild={true}
                                     >
-                                        <li className={'ComboboxMessage'}>
+                                        <li
+                                            className={
+                                                'ComboboxMessage ComboboxMessage--loading'
+                                            }
+                                        >
                                             Loading...
+                                        </li>
+                                    </OptionState>
+                                    <OptionState
+                                        type={'noResults'}
+                                        asChild={true}
+                                    >
+                                        <li
+                                            className={
+                                                'ComboboxMessage ComboboxMessage--noResults'
+                                            }
+                                        >
+                                            Nothing found
+                                        </li>
+                                    </OptionState>
+                                    <OptionState type={'error'} asChild={true}>
+                                        <li
+                                            className={
+                                                'ComboboxMessage ComboboxMessage--error'
+                                            }
+                                        >
+                                            Error
                                         </li>
                                     </OptionState>
                                 </>
@@ -459,5 +539,7 @@ export const renderMultiCombobox = (
         getListbox: () => qs(container, '.ComboboxListbox')!,
         getOptions: () => qsAll<HTMLLIElement>(container, '.ComboboxOption'),
         getChips: () => qsAll(container, '.ComboboxChip'),
+        getChipRemoves: () => qsAll(container, '.ComboboxChipRemove'),
+        getMessage: (type) => qs(container, `.ComboboxMessage--${type}`),
     };
 };

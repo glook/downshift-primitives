@@ -4,40 +4,15 @@ import {act, fireEvent, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, test, vi} from 'vitest';
 
-import type {DownshiftGetItemsFn} from '../interface';
 import {
     CITIES,
-    City,
     createDeferredGetItems,
     createGetItemsMock,
+    createPaginatedGetItemsMock,
     cityToString,
+    flush,
     renderCombobox,
 } from './fixtures';
-
-/** Paginated getItems: each page has `pageSize` items, cursor advances until exhausted. */
-const createPaginatedGetItemsMock = (
-    items: City[],
-    pageSize: number,
-): DownshiftGetItemsFn<City, number> =>
-    vi.fn(async ({filterText}, cursor) => {
-        const page = cursor ?? 0;
-        const query = (filterText ?? '').trim().toLowerCase();
-        const filtered = query
-            ? items.filter((city) => city.name.toLowerCase().includes(query))
-            : items;
-        const pageItems = filtered.slice(
-            page * pageSize,
-            (page + 1) * pageSize,
-        );
-        return {
-            items: pageItems,
-            cursor:
-                (page + 1) * pageSize < filtered.length ? page + 1 : undefined,
-        };
-    }) as unknown as DownshiftGetItemsFn<City, number>;
-
-/** Flushes pending microtasks (e.g. the swallowed first `useAsyncList` load). */
-const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe('DownshiftCombobox', () => {
     // Regression: an `initialInputValue = ''` default used to disable downshift's
