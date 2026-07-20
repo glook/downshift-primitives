@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.10.0](https://github.com/glook/downshift-primitives/compare/v0.9.1...v0.10.0) (2026-07-20)
+
+
+### Features
+
+* support react 16.14 through 19 ([3e1d238](https://github.com/glook/downshift-primitives/commit/3e1d238f31c3203c34cc72a6f986a684dc601b9d))
+
+
+### Bug Fixes
+
+* stop autoUpdate while the dropdown menu is closed ([e4a7b61](https://github.com/glook/downshift-primitives/commit/e4a7b614a0207d632b44d0e5aee8bbf1f497e9b5))
+
 ## [0.9.1](https://github.com/glook/downshift-primitives/compare/v0.9.0...v0.9.1) (2026-07-20)
 
 

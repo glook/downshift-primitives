@@ -1,6 +1,6 @@
 {
   "name": "@glook/downshift-primitives",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Headless compound components for combobox, multi-combobox and select, built on downshift",
   "license": "MIT",
   "author": "Andrey Polyakov",
