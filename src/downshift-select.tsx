@@ -14,10 +14,7 @@ import {DownshiftProps} from './interface';
 
 export interface DownshiftSelectProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
-        Omit<
-            UseSelectProps<Item>,
-            'items'
-        > {}
+        Omit<UseSelectProps<Item>, 'items'> {}
 
 export const DownshiftSelect = <T, C>(
     props: DownshiftSelectProps<T, C>,
@@ -52,8 +49,8 @@ export const DownshiftSelect = <T, C>(
             isItemDisabled,
             onHighlightedIndexChange: (changes) => {
                 setHighlightedIndex(changes.highlightedIndex);
-                if(onHighlightedIndexChange) {
-                    onHighlightedIndexChange(changes)
+                if (onHighlightedIndexChange) {
+                    onHighlightedIndexChange(changes);
                 }
             },
             ...selectProps,

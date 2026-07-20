@@ -11,7 +11,9 @@ import {
 import {mergeProps} from '@react-aria/utils';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftClearElement = React.ElementRef<typeof Radix.Primitive.span>;
+export type DownshiftClearElement = React.ElementRef<
+    typeof Radix.Primitive.span
+>;
 
 export interface DownshiftClearProps
     extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {

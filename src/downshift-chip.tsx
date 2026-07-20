@@ -24,9 +24,8 @@ export const DownshiftChip = <T,>(
     props: DownshiftChipProps<T>,
 ): React.ReactElement => {
     const {isDisabled} = useBaseDownshiftContext('DownshiftChip');
-    const {getSelectedItemProps, activeIndex} = useDownshiftMultiComboboxContext(
-        'DownshiftChip',
-    );
+    const {getSelectedItemProps, activeIndex} =
+        useDownshiftMultiComboboxContext('DownshiftChip');
     const {rawValue, index, asChild, children, ...rest} = props;
     const isActive = activeIndex === index;
 

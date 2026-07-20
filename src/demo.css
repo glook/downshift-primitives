@@ -6,7 +6,10 @@
  */
 
 .DemoRoot {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        sans-serif;
     font-size: 14px;
     max-width: 420px;
     color: #1f2933;
@@ -25,7 +28,9 @@
     border: 1px solid #cbd2d9;
     border-radius: 6px;
     cursor: text;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
 }
 
 .ComboboxTrigger:focus-within {

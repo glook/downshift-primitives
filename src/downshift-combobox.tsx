@@ -17,10 +17,7 @@ import {DownshiftProps} from './interface';
 
 export interface DownshiftComboboxProps<Item, Cursor>
     extends DownshiftProps<Item, Cursor>,
-        Omit<
-            UseComboboxProps<Item>,
-            | 'items'| 'itemToString'
-        >,
+        Omit<UseComboboxProps<Item>, 'items' | 'itemToString'>,
         Required<Pick<UseComboboxProps<Item>, 'itemToString'>> {
     debounceTime?: number;
 }

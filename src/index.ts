@@ -20,7 +20,10 @@ export {DownshiftInput, Input} from './downshift-input';
 export {DownshiftLabel, Label} from './downshift-label';
 export {DownshiftListbox, Listbox} from './downshift-listbox';
 export {DownshiftListBoxItems, ListBoxItems} from './downshift-listbox-items';
-export {DownshiftLoadingIndicator, LoadingIndicator} from './downshift-loading-indicator';
+export {
+    DownshiftLoadingIndicator,
+    LoadingIndicator,
+} from './downshift-loading-indicator';
 export {DownshiftOption, Option} from './downshift-option';
 export {DownshiftOptionState, OptionState} from './downshift-option-state';
 export {DownshiftSelect, Select} from './downshift-select';
@@ -48,9 +51,15 @@ export type {
 } from './downshift-selected-items';
 
 export type {DownshiftArrowProps} from './downshift-arrow';
-export type {DownshiftClearElement,DownshiftClearProps} from './downshift-clear';
+export type {
+    DownshiftClearElement,
+    DownshiftClearProps,
+} from './downshift-clear';
 export type {DownshiftComboboxProps} from './downshift-combobox';
-export type {DownshiftInputElement,DownshiftInputProps} from './downshift-input';
+export type {
+    DownshiftInputElement,
+    DownshiftInputProps,
+} from './downshift-input';
 export type {
     DownshiftLabelElement,
     DownshiftLabelProps,
@@ -71,6 +80,12 @@ export type {
     DownshiftOptionStateProps,
 } from './downshift-option-state';
 export type {DownshiftSelectProps} from './downshift-select';
-export type {DownshiftPlaceholderProps, DownshiftPlaceholderElement} from './downshift-placeholder';
-export type {SelectedItemElement,SelectedItemProps} from './downshift-selected-item';
+export type {
+    DownshiftPlaceholderProps,
+    DownshiftPlaceholderElement,
+} from './downshift-placeholder';
+export type {
+    SelectedItemElement,
+    SelectedItemProps,
+} from './downshift-selected-item';
 export type {DownshiftTriggerProps} from './downshift-trigger';

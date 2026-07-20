@@ -48,9 +48,7 @@ const ComboboxDemo = (props: DemoProps): React.ReactElement => {
                             >
                                 <input className={'ComboboxInput'} />
                             </Input>
-                            <SelectedItem
-                                className={'ComboboxSelectedItem'}
-                            />
+                            <SelectedItem className={'ComboboxSelectedItem'} />
                         </span>
                         <span className={'ComboboxIndicators'}>
                             <LoadingIndicator>…</LoadingIndicator>

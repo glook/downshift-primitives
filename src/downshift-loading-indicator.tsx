@@ -5,7 +5,9 @@ import React from 'react';
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftLoadingIndicatorElement = React.ElementRef<typeof Radix.Primitive.span>;
+export type DownshiftLoadingIndicatorElement = React.ElementRef<
+    typeof Radix.Primitive.span
+>;
 
 export interface DownshiftLoadingIndicatorProps
     extends Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {

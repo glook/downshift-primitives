@@ -12,8 +12,12 @@ import {preventDownshiftDefault} from './utils';
 import type * as Radix from '@radix-ui/react-primitive';
 import {Slot} from '@radix-ui/react-slot';
 
-export type DownshiftInputElement = React.ElementRef<typeof Radix.Primitive.input>;
-export type DownshiftInputProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.input>;
+export type DownshiftInputElement = React.ElementRef<
+    typeof Radix.Primitive.input
+>;
+export type DownshiftInputProps = Radix.ComponentPropsWithoutRef<
+    typeof Radix.Primitive.input
+>;
 
 interface InputStateProps {
     isDisabled?: boolean;
@@ -102,9 +106,8 @@ const DownshiftMultiComboboxInput = React.forwardRef<
     const {isDisabled} = useBaseDownshiftContext('DownshiftInput');
     const {isFocused, downshiftProps, setIsFocused} =
         useDownshiftComboboxContext('DownshiftInput');
-    const {selectedItems, getDropdownProps} = useDownshiftMultiComboboxContext(
-        'DownshiftInput',
-    );
+    const {selectedItems, getDropdownProps} =
+        useDownshiftMultiComboboxContext('DownshiftInput');
     const {getInputProps, openMenu, highlightedIndex, isOpen} = downshiftProps;
 
     // getDropdownProps wires up keyboard navigation over the chips (arrows, Backspace)

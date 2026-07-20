@@ -11,7 +11,9 @@ import * as Radix from '@radix-ui/react-primitive';
 export type DownshiftListboxElement = React.ElementRef<
     typeof Radix.Primitive.div
 >;
-export type DownshiftListboxProps = Radix.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
+export type DownshiftListboxProps = Radix.ComponentPropsWithoutRef<
+    typeof Radix.Primitive.div
+>;
 
 export const DownshiftListbox = React.forwardRef<
     DownshiftListboxElement,
