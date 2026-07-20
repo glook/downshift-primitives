@@ -331,4 +331,35 @@ describe('DownshiftCombobox', () => {
         expect(getListbox()).toHaveAttribute('data-is-open', 'false');
         expect(getItemsMock).not.toHaveBeenCalled();
     });
+
+    // Regression: autoUpdate used to outlive the closed menu, so on a reopen its
+    // ResizeObserver saw a 0 -> height jump and the browser reported "ResizeObserver
+    // loop completed with undelivered notifications".
+    test('tears down the floating observer when the menu closes', async () => {
+        const disconnectSpy = vi.fn();
+        vi.stubGlobal(
+            'ResizeObserver',
+            class {
+                observe(): void {}
+                unobserve(): void {}
+                disconnect = disconnectSpy;
+            },
+        );
+
+        try {
+            const user = userEvent.setup();
+            const {getInput, getListbox} = renderCombobox();
+
+            await user.click(getInput());
+            await waitFor(() =>
+                expect(getListbox()).toHaveAttribute('data-is-open', 'true'),
+            );
+            disconnectSpy.mockClear();
+
+            await user.keyboard('{Escape}');
+            await waitFor(() => expect(disconnectSpy).toHaveBeenCalled());
+        } finally {
+            vi.unstubAllGlobals();
+        }
+    });
 });

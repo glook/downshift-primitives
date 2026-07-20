@@ -62,7 +62,11 @@ export const useDropdownMenuFloating = (
     const floating = useFloating({
         middleware,
         placement,
-        whileElementsMounted: autoUpdate,
+        // autoUpdate only while open: the guard below swallows setFloating(null),
+        // so otherwise the ResizeObserver outlives the close and on a reopen
+        // catches the 0 -> height jump ("ResizeObserver loop completed with
+        // undelivered notifications").
+        whileElementsMounted: isOpen ? autoUpdate : undefined,
         open: isOpen,
     });
 
