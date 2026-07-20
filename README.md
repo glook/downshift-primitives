@@ -8,7 +8,7 @@ No styles, no markup opinions. Every part is a slot you render yourself; state i
 npm install @glook/downshift-primitives
 ```
 
-Peer deps: `react` / `react-dom` `^16.8 || ^17 || ^18`.
+Peer deps: `react` / `react-dom` `^16.14 || ^17 || ^18 || ^19` — every major is run in CI.
 
 ## Usage
 
@@ -121,6 +121,14 @@ The listbox is positioned with floating-ui and exposes `--list-box-reference-wid
 npm run storybook   # component catalogue, the only way to run things by hand
 npm run build       # dist/index.{js,cjs,d.ts}
 npm run typecheck
+npm test            # vitest + jsdom
+```
+
+Testing against another major locally mirrors the CI matrix, for example:
+
+```bash
+npm install --no-save react@17 react-dom@17 @types/react@17 @types/react-dom@17 @testing-library/react@12
+npm ci              # back to the React 18 dev stack
 ```
 
 ## License
