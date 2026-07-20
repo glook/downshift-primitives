@@ -49,9 +49,7 @@ export const DownshiftChip = <T,>(
     );
 };
 
-export type DownshiftChipRemoveElement = React.ElementRef<
-    typeof Radix.Primitive.span
->;
+export type DownshiftChipRemoveElement = HTMLSpanElement;
 
 export interface DownshiftChipRemoveProps
     extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.span> {

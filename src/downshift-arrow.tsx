@@ -6,9 +6,7 @@ import React from 'react';
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftArrowElement = React.ElementRef<
-    typeof Radix.Primitive.span
->;
+export type DownshiftArrowElement = HTMLSpanElement;
 export type DownshiftArrowProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.span
 >;

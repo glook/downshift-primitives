@@ -8,9 +8,7 @@ import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
 import * as Radix from '@radix-ui/react-primitive';
 
-export type DownshiftListboxElement = React.ElementRef<
-    typeof Radix.Primitive.div
->;
+export type DownshiftListboxElement = HTMLDivElement;
 export type DownshiftListboxProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.div
 >;
