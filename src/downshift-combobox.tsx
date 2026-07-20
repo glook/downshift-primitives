@@ -34,7 +34,10 @@ export const DownshiftCombobox = <T, C>(
         renderSelectedItem,
         isLoading, // input
         dropdownMenuFloatingOptions,
-        initialInputValue = '',
+        // No default: a defined initialInputValue makes downshift skip deriving
+        // inputValue from selectedItem in getInitialState, so a pre-filled
+        // combobox would start with an empty input
+        initialInputValue,
         children,
         isItemDisabled,
         stateReducer,
