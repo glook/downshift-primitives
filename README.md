@@ -149,7 +149,24 @@ The listbox is positioned with floating-ui and exposes `--list-box-reference-wid
 
 - `getOptionValue` is a required prop of every root (`Select`, `Combobox`, `MultiCombobox`); `ListBoxItems.getOptionValue` became an optional override.
 - `Option` takes `value={value}` (an entry of `values`) instead of `rawValue` + `index`.
-- Migration: move `getOptionValue` from `ListBoxItems` to the root, replace `values.map(({rawValue}, index) => <Option rawValue={rawValue} index={index}>)` with `values.map((value) => <Option value={value}>)`.
+
+Migration - move `getOptionValue` from `ListBoxItems` to the root and hand `Option` the whole entry:
+
+```tsx
+// 0.10
+<ListBoxItems<City> getOptionValue={(city) => city.id}>
+    {({values}) => values.map(({rawValue}, index) => (
+        <Option key={rawValue.id} rawValue={rawValue} index={index}>{rawValue.name}</Option>
+    ))}
+</ListBoxItems>
+
+// 0.11 - getOptionValue lives on the root: <Select getOptionValue={(city) => city.id} …>
+<ListBoxItems<City>>
+    {({values}) => values.map((value) => (
+        <Option key={value.value} value={value}>{value.rawValue.name}</Option>
+    ))}
+</ListBoxItems>
+```
 
 ## Development
 

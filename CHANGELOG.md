@@ -3,6 +3,12 @@
 ## [0.11.0](https://github.com/glook/downshift-primitives/compare/v0.10.1...v0.11.0) (2026-09-18)
 
 
+### ⚠ BREAKING CHANGES
+
+* **option:** `Option` takes `value: DownshiftListBoxValue<T>` - one entry of the `values` that `ListBoxItems` hands to its render prop - instead of `rawValue` + `index`; `data-is-selected` / `data-is-active` come from that entry. Before/after: [README, "Breaking changes"](./README.md#breaking-changes)
+* **root:** `getOptionValue` is a required prop of `Select` and `Combobox`, as it already was of `MultiCombobox`; `ListBoxItems.getOptionValue` became an optional per-list override
+* **context:** the internal `DownshiftListBoxProvider` / `useDownshiftListBoxContext` pair is removed (it was never exported from the package entry) - `Option` no longer derives selection and highlight through a per-list context
+
 ### Features
 
 * getOptionValue on the root and value-based Option ([c489fa9](https://github.com/glook/downshift-primitives/commit/c489fa99ad2cc7317ec551798515180bf83643f1))
