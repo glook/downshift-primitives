@@ -7,6 +7,7 @@ import {
     useBaseDownshiftContext,
     useDownshiftComboboxContext,
 } from './downshiftComboboxContext';
+import {useStableRefCallback} from './hooks/useStableRefCallback';
 import {preventDownshiftDefault} from './utils';
 import {Slot} from '@radix-ui/react-slot';
 
@@ -33,7 +34,6 @@ const DownshiftSelectTrigger = React.forwardRef<
         downshiftProps;
 
     const containerProps = getToggleButtonProps({
-        ref: mergeRefs<any>(dropdownMenuFloatingProps.refs.setReference, ref),
         onMouseEnter: () => setIsHovered(true),
         onMouseLeave: () => setIsHovered(false),
         disabled: isDisabled,
@@ -52,11 +52,21 @@ const DownshiftSelectTrigger = React.forwardRef<
             }
         },
     });
+    // see Listbox: one stable callback for React, fanning out to downshift's
+    // fresh handleRefs, floating-ui and the consumer's ref
+    const stableRef = useStableRefCallback<HTMLElement>(
+        mergeRefs<any>(
+            containerProps.ref,
+            dropdownMenuFloatingProps.refs.setReference,
+            ref,
+        ),
+    );
     const Component = asChild ? Slot : type === 'select' ? 'button' : 'span';
 
     return (
         <Component
             {...mergeProps<any[]>(containerProps, rest)}
+            ref={stableRef}
             data-is-disabled={isDisabled}
             data-is-hovered={isHovered}
             data-is-open={isOpen}

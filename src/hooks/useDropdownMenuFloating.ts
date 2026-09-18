@@ -62,35 +62,13 @@ export const useDropdownMenuFloating = (
     const floating = useFloating({
         middleware,
         placement,
-        // autoUpdate only while open: the guard below swallows setFloating(null),
-        // so otherwise the ResizeObserver outlives the close and on a reopen
-        // catches the 0 -> height jump ("ResizeObserver loop completed with
-        // undelivered notifications").
+        // autoUpdate only while open: the listbox stays mounted when closed,
+        // so an always-on ResizeObserver would outlive the close and on a
+        // reopen catch the 0 -> height jump ("ResizeObserver loop completed
+        // with undelivered notifications"), see ADR-0002 / ADR-0007.
         whileElementsMounted: isOpen ? autoUpdate : undefined,
         open: isOpen,
     });
 
-    const {setReference, setFloating} = floating.refs;
-
-    // Trigger and Listbox hand over unstable ref callbacks, so React detaches them
-    // with null on every render - and floating-ui loops on null. Guard below; see
-    // docs/adr/0002-floating-refs-null-guard.md.
-    const refs = useMemo(
-        () => ({
-            ...floating.refs,
-            setReference: (node: Element | null) => {
-                if (node) {
-                    setReference(node);
-                }
-            },
-            setFloating: (node: HTMLElement | null) => {
-                if (node) {
-                    setFloating(node);
-                }
-            },
-        }),
-        [floating.refs, setReference, setFloating],
-    );
-
-    return {...floating, refs};
+    return floating;
 };
