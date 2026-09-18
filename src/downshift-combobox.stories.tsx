@@ -24,14 +24,18 @@ import {
 
 interface DemoProps {
     disabled?: boolean;
+    /** Render the listbox into document.body instead of the trigger's tree. */
+    portal?: boolean;
+    /** Wrap the demo in an overflow: hidden box - only a portal can escape it. */
+    clipped?: boolean;
     debounceTime?: number;
 }
 
 const ComboboxDemo = (props: DemoProps): React.ReactElement => {
-    const {disabled, debounceTime = 300} = props;
+    const {disabled, debounceTime = 300, portal, clipped} = props;
 
     return (
-        <div className={'DemoRoot'}>
+        <div className={clipped ? 'DemoRoot DemoRoot--clipped' : 'DemoRoot'}>
             <Combobox<DemoCity, number>
                 getItems={getCities}
                 itemToString={cityToString}
@@ -57,7 +61,7 @@ const ComboboxDemo = (props: DemoProps): React.ReactElement => {
                         </span>
                     </span>
                 </Trigger>
-                <Listbox asChild={true}>
+                <Listbox asChild={true} portal={portal}>
                     <ul className={'ComboboxListbox'}>
                         <ListBoxItems<DemoCity>
                             getOptionValue={getCityOptionValue}
@@ -119,4 +123,14 @@ export const Default: Story = {};
 
 export const Disabled: Story = {
     args: {disabled: true},
+};
+
+/** The listbox lives in document.body; positioning and z-index are unchanged. */
+export const Portal: Story = {
+    args: {portal: true},
+};
+
+/** Same, inside an overflow: hidden box that would clip an inline listbox. */
+export const PortalInClippedContainer: Story = {
+    args: {portal: true, clipped: true},
 };

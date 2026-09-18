@@ -5,6 +5,12 @@
  * unstyled - this file shows how to hang an appearance on their data-attributes.
  */
 
+.DemoRoot--clipped {
+    height: 120px;
+    overflow: hidden;
+    outline: 1px dashed #c33;
+}
+
 .DemoRoot {
     font-family:
         system-ui,

@@ -3,6 +3,7 @@
 import {Slot} from '@radix-ui/react-slot';
 import {mergeProps, mergeRefs} from '@react-aria/utils';
 import React, {useEffect} from 'react';
+import {createPortal} from 'react-dom';
 
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
@@ -11,12 +12,19 @@ import * as Radix from '@radix-ui/react-primitive';
 export type DownshiftListboxElement = HTMLDivElement;
 export type DownshiftListboxProps = React.ComponentPropsWithoutRef<
     typeof Radix.Primitive.div
->;
+> & {
+    /**
+     * Renders the listbox into `document.body` (`true`) or into the given
+     * element. The container must exist on the first render - the caller owns
+     * that guarantee. Client-only: on the server the listbox renders nothing.
+     */
+    portal?: boolean | Element;
+};
 
 export const DownshiftListbox = React.forwardRef<
     DownshiftListboxElement,
     DownshiftListboxProps
->((props: DownshiftListboxProps, ref): React.ReactElement => {
+>((props: DownshiftListboxProps, ref): React.ReactElement | null => {
     const isLoading = useIsDownshiftLoading();
     const {
         loadingState,
@@ -27,7 +35,7 @@ export const DownshiftListbox = React.forwardRef<
     } = useBaseDownshiftContext('DownshiftListBox');
     const {getMenuProps, isOpen, inputValue} = downshiftProps;
     const {strategy, x, y} = dropdownMenuFloatingProps;
-    const {children, style, asChild, ...rest} = props;
+    const {children, style, asChild, portal, ...rest} = props;
     const Component = asChild ? Slot : 'div';
     const listboxRef = React.useRef<DownshiftListboxElement>(null);
 
@@ -56,7 +64,7 @@ export const DownshiftListbox = React.forwardRef<
         }
     }, [inputValue]);
 
-    return (
+    const listbox = (
         <Component
             {...menuProps}
             data-is-open={isOpen}
@@ -68,6 +76,14 @@ export const DownshiftListbox = React.forwardRef<
             {children}
         </Component>
     );
+
+    if (!portal) {
+        return listbox;
+    }
+    if (typeof document === 'undefined') {
+        return null;
+    }
+    return createPortal(listbox, portal === true ? document.body : portal);
 });
 
 export const Listbox = DownshiftListbox;
