@@ -12,14 +12,14 @@ export type DownshiftOptionStateElement = HTMLDivElement;
 export interface DownshiftOptionStateProps
     extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     forceMount?: boolean;
-    type: 'loading' | 'loadingMore' | 'noResults' | 'error';
+    type: 'loading' | 'loadingMore' | 'noResults' | 'error' | 'belowMinLength';
 }
 
 export const DownshiftOptionState = React.forwardRef<
     DownshiftOptionStateElement,
     DownshiftOptionStateProps
 >((props, ref): React.ReactElement | null => {
-    const {loadingState, downshiftProps, items} =
+    const {loadingState, downshiftProps, items, isBelowMinLength} =
         useBaseDownshiftContext('DownshiftListBox');
     const isLoading = useIsDownshiftLoading();
     const {isOpen} = downshiftProps;
@@ -35,7 +35,13 @@ export const DownshiftOptionState = React.forwardRef<
                 case 'loadingMore':
                     return loadingState === 'loadingMore';
                 case 'noResults':
-                    return loadingState === 'idle' && items.length === 0;
+                    return (
+                        loadingState === 'idle' &&
+                        items.length === 0 &&
+                        !isBelowMinLength
+                    );
+                case 'belowMinLength':
+                    return !!isBelowMinLength;
                 case 'error':
                     return loadingState === 'error';
                 default:
@@ -43,7 +49,7 @@ export const DownshiftOptionState = React.forwardRef<
             }
         }
         return false;
-    }, [type, isOpen, loadingState]);
+    }, [type, isOpen, loadingState, items.length, isBelowMinLength]);
 
     if (!isVisible && !forceMount) {
         return null;

@@ -152,6 +152,7 @@ export const MESSAGE_TYPES = [
     'loadingMore',
     'noResults',
     'error',
+    'belowMinLength',
 ] as const;
 
 export type MessageType = (typeof MESSAGE_TYPES)[number];

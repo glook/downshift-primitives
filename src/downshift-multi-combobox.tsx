@@ -34,6 +34,8 @@ export interface DownshiftMultiComboboxProps<Item, Cursor>
     getOptionValue: (item: Item) => string;
     itemToString?: (item: Item | null) => string;
     debounceTime?: number;
+    // shorter filterText does not call getItems; OptionState type="belowMinLength" shows instead
+    minLength?: number;
 }
 
 export const DownshiftMultiCombobox = <T, C>(
@@ -46,6 +48,7 @@ export const DownshiftMultiCombobox = <T, C>(
         itemToString,
         disabled,
         debounceTime = 0,
+        minLength,
         renderSelectedItem,
         isLoading,
         dropdownMenuFloatingOptions,
@@ -70,6 +73,7 @@ export const DownshiftMultiCombobox = <T, C>(
         setFilterText,
         clearItems,
         listBoxProps,
+        isBelowMinLength,
     } = useDownshiftAsyncList({...props, highlightedIndex});
 
     // selected items are dropped from the list before useCombobox: otherwise the
@@ -197,6 +201,7 @@ export const DownshiftMultiCombobox = <T, C>(
             renderSelectedItem={renderSelectedItem}
             isItemDisabled={isItemDisabled}
             hasSelectedItem={selectedItems.length > 0}
+            isBelowMinLength={isBelowMinLength}
         >
             <DownshiftComboboxProvider
                 downshiftProps={comboboxMethods}

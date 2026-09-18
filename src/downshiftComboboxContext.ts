@@ -30,6 +30,8 @@ interface DownshiftContext {
         | UseComboboxProps<any>['isItemDisabled'];
     // whether a value is selected: in multi-combobox that means a non-empty chip list
     hasSelectedItem?: boolean;
+    // combobox modes only: filterText is shorter than the root's minLength
+    isBelowMinLength?: boolean;
 }
 
 interface DownshiftComboboxContext {

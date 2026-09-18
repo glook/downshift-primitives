@@ -29,10 +29,12 @@ interface DemoProps {
     /** Wrap the demo in an overflow: hidden box - only a portal can escape it. */
     clipped?: boolean;
     debounceTime?: number;
+    /** Shorter queries do not hit getItems; the belowMinLength state shows instead. */
+    minLength?: number;
 }
 
 const ComboboxDemo = (props: DemoProps): React.ReactElement => {
-    const {disabled, debounceTime = 300, portal, clipped} = props;
+    const {disabled, debounceTime = 300, portal, clipped, minLength} = props;
 
     return (
         <div className={clipped ? 'DemoRoot DemoRoot--clipped' : 'DemoRoot'}>
@@ -41,6 +43,7 @@ const ComboboxDemo = (props: DemoProps): React.ReactElement => {
                 itemToString={cityToString}
                 renderSelectedItem={(city) => <span>{city.name}</span>}
                 debounceTime={debounceTime}
+                minLength={minLength}
                 disabled={disabled}
             >
                 <Trigger asChild={true}>
@@ -96,6 +99,14 @@ const ComboboxDemo = (props: DemoProps): React.ReactElement => {
                                             Nothing found
                                         </li>
                                     </OptionState>
+                                    <OptionState
+                                        type={'belowMinLength'}
+                                        asChild={true}
+                                    >
+                                        <li className={'ComboboxMessage'}>
+                                            Type at least 3 characters
+                                        </li>
+                                    </OptionState>
                                 </>
                             )}
                         </ListBoxItems>
@@ -123,6 +134,11 @@ export const Default: Story = {};
 
 export const Disabled: Story = {
     args: {disabled: true},
+};
+
+/** Queries shorter than 3 characters never reach getItems. */
+export const MinLength: Story = {
+    args: {minLength: 3},
 };
 
 /** The listbox lives in document.body; positioning and z-index are unchanged. */
