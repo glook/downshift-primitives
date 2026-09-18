@@ -22,17 +22,27 @@ import {
 
 interface DemoProps {
     disabled?: boolean;
+    /** Render the listbox into document.body instead of the trigger's tree. */
+    portal?: boolean;
+    /** Wrap the demo in an overflow: hidden box - only a portal can escape it. */
+    clipped?: boolean;
     initialSelectedItems?: DemoCity[];
     debounceTime?: number;
 }
 
 const MultiComboboxDemo = (props: DemoProps): React.ReactElement => {
-    const {disabled, initialSelectedItems = [], debounceTime = 300} = props;
+    const {
+        disabled,
+        initialSelectedItems = [],
+        debounceTime = 300,
+        portal,
+        clipped,
+    } = props;
     const [selectedItems, setSelectedItems] =
         useState<DemoCity[]>(initialSelectedItems);
 
     return (
-        <div className={'DemoRoot'}>
+        <div className={clipped ? 'DemoRoot DemoRoot--clipped' : 'DemoRoot'}>
             <MultiCombobox<DemoCity, number>
                 selectedItems={selectedItems}
                 onChange={setSelectedItems}
@@ -70,7 +80,7 @@ const MultiComboboxDemo = (props: DemoProps): React.ReactElement => {
                         </Input>
                     </div>
                 </Trigger>
-                <Listbox asChild={true}>
+                <Listbox asChild={true} portal={portal}>
                     <ul className={'ComboboxListbox'}>
                         <ListBoxItems<DemoCity>
                             getOptionValue={getCityOptionValue}
@@ -146,4 +156,14 @@ export const Disabled: Story = {
         disabled: true,
         initialSelectedItems: [{id: '1', name: 'London', region: 'England'}],
     },
+};
+
+/** The listbox lives in document.body; positioning and z-index are unchanged. */
+export const Portal: Story = {
+    args: {portal: true},
+};
+
+/** Same, inside an overflow: hidden box that would clip an inline listbox. */
+export const PortalInClippedContainer: Story = {
+    args: {portal: true, clipped: true},
 };

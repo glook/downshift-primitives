@@ -11,7 +11,7 @@ import {Clear} from '../downshift-clear';
 import {Combobox, DownshiftComboboxProps} from '../downshift-combobox';
 import {Input} from '../downshift-input';
 import {Label} from '../downshift-label';
-import {Listbox} from '../downshift-listbox';
+import {DownshiftListboxProps, Listbox} from '../downshift-listbox';
 import {ListBoxItems} from '../downshift-listbox-items';
 import {LoadingIndicator} from '../downshift-loading-indicator';
 import {
@@ -182,9 +182,11 @@ const collectDataAttrs = (
         Object.entries(parts).map(([name, get]) => [name, dataAttrs(get())]),
     );
 
+export type ListboxPortal = DownshiftListboxProps['portal'];
+
 /** Shared by all three roots so every one of them exposes the same option states. */
-const listboxChildren = (
-    <Listbox asChild={true}>
+const listboxChildren = (portal?: ListboxPortal): React.ReactElement => (
+    <Listbox asChild={true} portal={portal}>
         <ul className={'ComboboxListbox'}>
             <ListBoxItems<City> getOptionValue={getCityOptionValue}>
                 {({values}) => (
@@ -236,9 +238,9 @@ export interface ComboboxHarness extends RenderResult {
 
 export type RenderComboboxOptions = Partial<
     Omit<DownshiftComboboxProps<City, number>, 'children'>
->;
+> & {portal?: ListboxPortal};
 
-const comboboxChildren = (
+const comboboxChildren = (portal?: ListboxPortal): React.ReactElement => (
     <>
         <Label className={'ComboboxLabel'}>City</Label>
         <Trigger asChild={true}>
@@ -261,7 +263,7 @@ const comboboxChildren = (
                 </Placeholder>
             </span>
         </Trigger>
-        {listboxChildren}
+        {listboxChildren(portal)}
     </>
 );
 
@@ -272,6 +274,7 @@ export const renderCombobox = (
         getItems = createGetItemsMock(),
         itemToString = cityToString,
         renderSelectedItem = (city: City) => <span>{city.name}</span>,
+        portal,
         ...rest
     } = options;
 
@@ -282,11 +285,13 @@ export const renderCombobox = (
             renderSelectedItem={renderSelectedItem}
             {...rest}
         >
-            {comboboxChildren}
+            {comboboxChildren(portal)}
         </Combobox>,
     );
 
     const {container} = utils;
+    // the portal renders the listbox outside the RTL container
+    const listboxScope = portal ? document.body : container;
 
     const parts = {
         label: () => qs(container, '.ComboboxLabel'),
@@ -296,8 +301,8 @@ export const renderCombobox = (
         loadingIndicator: () => qs(container, '.ComboboxLoadingIndicator'),
         clear: () => qs(container, '.ComboboxClear'),
         arrow: () => qs(container, '.ComboboxArrow'),
-        listbox: () => qs(container, '.ComboboxListbox'),
-        firstOption: () => qs(container, '.ComboboxOption'),
+        listbox: () => qs(listboxScope, '.ComboboxListbox'),
+        firstOption: () => qs(listboxScope, '.ComboboxOption'),
     };
 
     return {
@@ -305,14 +310,14 @@ export const renderCombobox = (
         getItemsMock: getItems,
         getInput: () => qs<HTMLInputElement>(container, '.ComboboxInput')!,
         getTrigger: () => qs(container, '.ComboboxTrigger')!,
-        getListbox: () => qs(container, '.ComboboxListbox')!,
+        getListbox: () => qs(listboxScope, '.ComboboxListbox')!,
         getArrow: () => qs(container, '.ComboboxArrow')!,
         getClear: () => qs(container, '.ComboboxClear'),
         getLabel: () => qs(container, '.ComboboxLabel'),
         getLoadingIndicator: () => qs(container, '.ComboboxLoadingIndicator'),
         getSelectedItem: () => qs(container, '.ComboboxSelectedItem'),
-        getOptions: () => qsAll<HTMLLIElement>(container, '.ComboboxOption'),
-        getMessage: (type) => qs(container, `.ComboboxMessage--${type}`),
+        getOptions: () => qsAll<HTMLLIElement>(listboxScope, '.ComboboxOption'),
+        getMessage: (type) => qs(listboxScope, `.ComboboxMessage--${type}`),
         getPlaceholderProbe: () => qs(container, '.BranchProbePlaceholder'),
         snapshotAttrs: () => collectDataAttrs(parts),
     };
@@ -336,7 +341,7 @@ export interface SelectHarness extends RenderResult {
 
 export type RenderSelectOptions = Partial<
     Omit<DownshiftSelectProps<City, number>, 'children'>
->;
+> & {portal?: ListboxPortal};
 
 export const renderSelect = (
     options: RenderSelectOptions = {},
@@ -344,6 +349,7 @@ export const renderSelect = (
     const {
         getItems = createGetItemsMock(),
         renderSelectedItem = (city: City) => <span>{city.name}</span>,
+        portal,
         ...rest
     } = options;
 
@@ -372,11 +378,13 @@ export const renderSelect = (
                     <Input className={'BranchProbeInput'} />
                 </button>
             </Trigger>
-            {listboxChildren}
+            {listboxChildren(portal)}
         </Select>,
     );
 
     const {container} = utils;
+    // the portal renders the listbox outside the RTL container
+    const listboxScope = portal ? document.body : container;
 
     const parts = {
         label: () => qs(container, '.ComboboxLabel'),
@@ -386,22 +394,22 @@ export const renderSelect = (
         loadingIndicator: () => qs(container, '.ComboboxLoadingIndicator'),
         clear: () => qs(container, '.ComboboxClear'),
         arrow: () => qs(container, '.ComboboxArrow'),
-        listbox: () => qs(container, '.ComboboxListbox'),
-        firstOption: () => qs(container, '.ComboboxOption'),
+        listbox: () => qs(listboxScope, '.ComboboxListbox'),
+        firstOption: () => qs(listboxScope, '.ComboboxOption'),
     };
 
     return {
         ...utils,
         getItemsMock: getItems,
         getTrigger: () => qs(container, '.ComboboxTrigger')!,
-        getListbox: () => qs(container, '.ComboboxListbox')!,
+        getListbox: () => qs(listboxScope, '.ComboboxListbox')!,
         getPlaceholder: () => qs(container, '.ComboboxPlaceholder'),
         getSelectedItem: () => qs(container, '.ComboboxSelectedItem'),
-        getOptions: () => qsAll<HTMLLIElement>(container, '.ComboboxOption'),
+        getOptions: () => qsAll<HTMLLIElement>(listboxScope, '.ComboboxOption'),
         getClear: () => qs(container, '.ComboboxClear'),
         getLabel: () => qs(container, '.ComboboxLabel'),
         getLoadingIndicator: () => qs(container, '.ComboboxLoadingIndicator'),
-        getMessage: (type) => qs(container, `.ComboboxMessage--${type}`),
+        getMessage: (type) => qs(listboxScope, `.ComboboxMessage--${type}`),
         getInputProbe: () => qs(container, '.BranchProbeInput'),
         snapshotAttrs: () => collectDataAttrs(parts),
     };
@@ -432,6 +440,7 @@ export type RenderMultiComboboxOptions = Partial<
     >
 > & {
     initialSelectedItems?: City[];
+    portal?: ListboxPortal;
 };
 
 export const renderMultiCombobox = (
@@ -443,6 +452,7 @@ export const renderMultiCombobox = (
         itemToString = cityToString,
         renderSelectedItem = (city: City) => <span>{city.name}</span>,
         initialSelectedItems = [],
+        portal,
         ...rest
     } = options;
 
@@ -503,13 +513,15 @@ export const renderMultiCombobox = (
                         <SelectedItem className={'BranchProbeSelectedItem'} />
                     </div>
                 </Trigger>
-                {listboxChildren}
+                {listboxChildren(portal)}
             </MultiCombobox>
         );
     };
 
     const utils = render(<Wrapper />);
     const {container} = utils;
+    // the portal renders the listbox outside the RTL container
+    const listboxScope = portal ? document.body : container;
 
     const parts = {
         label: () => qs(container, '.ComboboxLabel'),
@@ -519,8 +531,8 @@ export const renderMultiCombobox = (
         loadingIndicator: () => qs(container, '.ComboboxLoadingIndicator'),
         clear: () => qs(container, '.ComboboxClear'),
         arrow: () => qs(container, '.ComboboxArrow'),
-        listbox: () => qs(container, '.ComboboxListbox'),
-        firstOption: () => qs(container, '.ComboboxOption'),
+        listbox: () => qs(listboxScope, '.ComboboxListbox'),
+        firstOption: () => qs(listboxScope, '.ComboboxOption'),
     };
 
     return {
@@ -529,15 +541,15 @@ export const renderMultiCombobox = (
         onChange,
         getInput: () => qs<HTMLInputElement>(container, '.ComboboxInput')!,
         getTrigger: () => qs(container, '.ComboboxTrigger')!,
-        getListbox: () => qs(container, '.ComboboxListbox')!,
-        getOptions: () => qsAll<HTMLLIElement>(container, '.ComboboxOption'),
+        getListbox: () => qs(listboxScope, '.ComboboxListbox')!,
+        getOptions: () => qsAll<HTMLLIElement>(listboxScope, '.ComboboxOption'),
         getChips: () => qsAll(container, '.ComboboxChip'),
         getChipRemoves: () => qsAll(container, '.ComboboxChipRemove'),
         getClear: () => qs(container, '.ComboboxClear'),
         getLabel: () => qs(container, '.ComboboxLabel'),
         getLoadingIndicator: () => qs(container, '.ComboboxLoadingIndicator'),
         getSelectedItemProbe: () => qs(container, '.BranchProbeSelectedItem'),
-        getMessage: (type) => qs(container, `.ComboboxMessage--${type}`),
+        getMessage: (type) => qs(listboxScope, `.ComboboxMessage--${type}`),
         snapshotAttrs: () => collectDataAttrs(parts),
     };
 };

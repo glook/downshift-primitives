@@ -96,6 +96,17 @@ Parts that read the root: `Trigger`, `Clear` and `SelectedItem` render the right
 
 Most parts accept `asChild` and merge their props into your element, so you keep full control of the markup.
 
+### Portal
+
+`Listbox` can render its element outside the trigger's tree - useful inside dialogs or any ancestor with `overflow: hidden` / `transform`:
+
+```tsx
+<Listbox portal={true}>…</Listbox>            // into document.body
+<Listbox portal={dialogElement}>…</Listbox>   // into a specific element
+```
+
+The decision is made on the first render and the container must already exist: pass an element, not `null`, and let whoever owns the container (a modal wrapper, for example) render the combobox only once the node is available. Positioning keeps working through `useDropdownMenuFloating`; `z-index` and the rest of the styling stay yours. The portal is client-only - during server rendering a portaled `Listbox` renders nothing, and SSR is not otherwise tested.
+
 ## Styling
 
 There is no CSS. Hook onto the data attributes:
