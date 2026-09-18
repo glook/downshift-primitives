@@ -74,6 +74,18 @@ const getCities: DownshiftGetItemsFn<City, number> = async ({filterText, signal}
 
 Items are cleared when the menu closes and re-fetched on open. In-flight requests are aborted through `signal`.
 
+### `minLength`
+
+`Combobox` and `MultiCombobox` accept `minLength`: while the (debounced) filter text is shorter, `getItems` is not called, the list stays empty and `loadingState` is `idle`. The menu still opens, so use `<OptionState type="belowMinLength">` for the hint - `noResults` is hidden below the threshold because no search happened.
+
+```tsx
+<Combobox getItems={getCities} minLength={3} …>
+    …
+    <OptionState type="belowMinLength">Type at least 3 characters</OptionState>
+    <OptionState type="noResults">Nothing found</OptionState>
+</Combobox>
+```
+
 ## Roots
 
 | Root | Selection | Required props |
@@ -92,7 +104,7 @@ Anything else from downshift's `useCombobox` / `useSelect` (`onSelectedItemChang
 
 Parts that read the root: `Trigger`, `Clear` and `SelectedItem` render the right variant automatically. Parts that do not apply render nothing — `Input` inside a `Select`, `Placeholder` inside a `Combobox`.
 
-`OptionState` takes `type: 'loading' | 'loadingMore' | 'noResults' | 'error'` and decides on its own whether to show.
+`OptionState` takes `type: 'loading' | 'loadingMore' | 'noResults' | 'error' | 'belowMinLength'` and decides on its own whether to show.
 
 Most parts accept `asChild` and merge their props into your element, so you keep full control of the markup.
 

@@ -15,38 +15,45 @@ interface UseDownshiftAsyncListProps<T, C>
         | UseComboboxProps<T>['isItemDisabled'];
     initialInputValue?: string;
     highlightedIndex?: number;
+    minLength?: number;
 }
 
 interface useDownShiftAsyncListReturn<T> extends AsyncListData<T> {
     load: () => void;
     clearItems: () => void;
+    isBelowMinLength: boolean;
     listBoxProps: React.ComponentPropsWithoutRef<typeof Radix.Primitive.div>;
 }
 
 export const useDownshiftAsyncList = <T, C>(
     props: UseDownshiftAsyncListProps<T, C>,
 ): useDownShiftAsyncListReturn<T> => {
-    const {getItems, initialInputValue, highlightedIndex, isItemDisabled} =
-        props;
+    const {
+        getItems,
+        initialInputValue,
+        highlightedIndex,
+        isItemDisabled,
+        minLength = 0,
+    } = props;
+    const isBelowMinLength = (filterText?: string): boolean =>
+        (filterText ?? '').length < minLength;
     const [localLoadingState, setLocalLoadingState] = useState<LoadingState>();
     const [isFirstLoadCalled, setIsFirstLoadCalled] = useState<boolean>(false);
     const asyncListProps = useAsyncList<T, C>({
         load: async ({cursor = undefined, signal, filterText}) => {
             setLocalLoadingState(undefined);
-            if (isFirstLoadCalled) {
-                return getItems(
-                    {
-                        signal,
-                        filterText,
-                    },
-                    cursor as C,
-                );
+            if (!isFirstLoadCalled) {
+                // When we just render the component, we don't want to load anything
+                setIsFirstLoadCalled(true);
+                return {items: []};
             }
-            // When we just render the component, we don't want to load anything
-            setIsFirstLoadCalled(true);
-            return {
-                items: [],
-            };
+            if (isBelowMinLength(filterText)) {
+                // 'idle' masks useAsyncList's own filtering -> idle transition,
+                // otherwise the loading indicator flashes for one frame
+                setLocalLoadingState('idle');
+                return {items: []};
+            }
+            return getItems({signal, filterText}, cursor as C);
         },
         initialFilterText: initialInputValue,
     });
@@ -105,6 +112,7 @@ export const useDownshiftAsyncList = <T, C>(
         loadingState: mergedLoadingState,
         items,
         clearItems,
+        isBelowMinLength: isBelowMinLength(asyncListProps.filterText),
         listBoxProps: {
             onScroll: ({currentTarget}) => {
                 const bottomBorder =
