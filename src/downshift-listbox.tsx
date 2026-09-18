@@ -7,6 +7,7 @@ import {createPortal} from 'react-dom';
 
 import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import {useIsDownshiftLoading} from './hooks/useIsDownshiftLoading';
+import {useStableRefCallback} from './hooks/useStableRefCallback';
 import * as Radix from '@radix-ui/react-primitive';
 
 export type DownshiftListboxElement = HTMLDivElement;
@@ -40,15 +41,6 @@ export const DownshiftListbox = React.forwardRef<
     const listboxRef = React.useRef<DownshiftListboxElement>(null);
 
     const menuProps = getMenuProps<DownshiftListboxProps>({
-        // mergeRefs returns Ref<T | null> for React 19 compatibility, which
-        // @types/react@18 rejects as a LegacyRef<T> - the cast keeps a single
-        // source that typechecks on both.
-        ref: mergeRefs(
-            isOpen ? dropdownMenuFloatingProps.refs.setFloating : null,
-            ref,
-            listboxRef,
-        ) as React.Ref<DownshiftListboxElement>,
-
         style: {
             position: strategy,
             top: y ?? 0,
@@ -57,6 +49,17 @@ export const DownshiftListbox = React.forwardRef<
         },
         ...mergeProps(rest, listBoxProps),
     });
+
+    // downshift's own ref comes back inside menuProps; React gets one stable
+    // callback that fans out to it, floating-ui and the consumer's ref
+    const stableRef = useStableRefCallback<DownshiftListboxElement>(
+        mergeRefs(
+            menuProps.ref as React.Ref<DownshiftListboxElement>,
+            dropdownMenuFloatingProps.refs.setFloating,
+            ref,
+            listboxRef,
+        ) as React.Ref<DownshiftListboxElement>,
+    );
 
     useEffect(() => {
         if (listboxRef.current) {
@@ -67,6 +70,7 @@ export const DownshiftListbox = React.forwardRef<
     const listbox = (
         <Component
             {...menuProps}
+            ref={stableRef}
             data-is-open={isOpen}
             data-has-error={isOpen && loadingState === 'error'}
             data-is-loading={isOpen && isLoading}
