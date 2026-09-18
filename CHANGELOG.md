@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/glook/downshift-primitives/compare/v0.10.0...v0.10.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* require downshift 9 so outside-touch detection reads live refs ([17a4e20](https://github.com/glook/downshift-primitives/commit/17a4e206230e1923f82eab2218a56627d479b58c))
+* require downshift 9 so outside-touch detection reads live refs ([4a37540](https://github.com/glook/downshift-primitives/commit/4a375404e758bdc29de308c8435cbdfa5f9595b2))
+
 ## [0.10.0](https://github.com/glook/downshift-primitives/compare/v0.9.1...v0.10.0) (2026-07-20)
 
 
