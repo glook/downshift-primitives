@@ -1,9 +1,17 @@
 // Created by: Andrey Polyakov (andrey@polyakov.im)
 
-import {fireEvent, waitFor} from '@testing-library/react';
+import {fireEvent, render, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import {describe, expect, test} from 'vitest';
 
+import {Listbox} from '../downshift-listbox';
+import {ListBoxItems} from '../downshift-listbox-items';
+import {Option} from '../downshift-option';
+import {Placeholder} from '../downshift-placeholder';
+import {Select} from '../downshift-select';
+import {SelectedItem} from '../downshift-selected-item';
+import {Trigger} from '../downshift-trigger';
 import {
     CITIES,
     createDeferredGetItems,
@@ -11,10 +19,89 @@ import {
     createPaginatedGetItemsMock,
     City,
     flush,
+    getCityOptionValue,
     renderSelect,
 } from './fixtures';
 
+/** The listbox subtree is remounted through `listboxKey`, the way a consumer moving it into a portal does. */
+const RemountableSelect = (props: {
+    listboxKey: string;
+    getItems: ReturnType<typeof createGetItemsMock>;
+}): React.ReactElement => (
+    <Select<City, number>
+        getItems={props.getItems}
+        renderSelectedItem={(city: City) => <span>{city.name}</span>}
+    >
+        <Trigger asChild={true}>
+            <button className={'ComboboxTrigger'} type={'button'}>
+                <Placeholder>Select a city</Placeholder>
+                <SelectedItem className={'ComboboxSelectedItem'} />
+            </button>
+        </Trigger>
+        <Listbox asChild={true} key={props.listboxKey}>
+            <ul className={'ComboboxListbox'}>
+                <ListBoxItems<City> getOptionValue={getCityOptionValue}>
+                    {({values}) =>
+                        values.map(({rawValue}, index) => (
+                            <Option
+                                asChild={true}
+                                key={rawValue.id}
+                                rawValue={rawValue}
+                                index={index}
+                            >
+                                <li className={'ComboboxOption'}>
+                                    {rawValue.name}
+                                </li>
+                            </Option>
+                        ))
+                    }
+                </ListBoxItems>
+            </ul>
+        </Listbox>
+    </Select>
+);
+
 describe('DownshiftSelect', () => {
+    // downshift < 9 snapshots menu/toggle elements for its outside-touch check (8.4 on
+    // every open, 8.5 once on mount), so a remounted listbox counted as "outside" and
+    // every tap closed the menu before the compat click could select. Mouse kept working
+    // because mouseup also accepts document.activeElement (the focused trigger).
+    test('touch tap selects an option after the listbox was remounted', async () => {
+        const user = userEvent.setup();
+        const getItems = createGetItemsMock();
+        const {container, rerender} = render(
+            <RemountableSelect listboxKey={'initial'} getItems={getItems} />,
+        );
+
+        await user.click(container.querySelector('.ComboboxTrigger')!);
+        await waitFor(() =>
+            expect(
+                container.querySelectorAll('.ComboboxOption').length,
+            ).toBeGreaterThan(0),
+        );
+        rerender(
+            <RemountableSelect listboxKey={'portal'} getItems={getItems} />,
+        );
+        await waitFor(() =>
+            expect(
+                container.querySelectorAll('.ComboboxOption').length,
+            ).toBeGreaterThan(0),
+        );
+
+        const berlin = Array.from(
+            container.querySelectorAll('.ComboboxOption'),
+        ).find((option) => option.textContent === 'Berlin')!;
+        fireEvent.touchStart(berlin);
+        fireEvent.touchEnd(berlin);
+        fireEvent.click(berlin);
+
+        await waitFor(() =>
+            expect(
+                container.querySelector('.ComboboxSelectedItem'),
+            ).toHaveTextContent('Berlin'),
+        );
+    });
+
     test('opens on trigger click, selects an option and renders it as SelectedItem', async () => {
         const user = userEvent.setup();
         const {getTrigger, getListbox, getOptions, getSelectedItem} =
