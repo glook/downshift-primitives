@@ -21,6 +21,7 @@ export const DownshiftSelect = <T, C>(
 ): React.ReactElement => {
     const {
         renderSelectedItem,
+        getOptionValue,
         disabled,
         isLoading,
         dropdownMenuFloatingOptions,
@@ -86,6 +87,7 @@ export const DownshiftSelect = <T, C>(
             setIsHovered={setIsHovered}
             type={'select'}
             renderSelectedItem={renderSelectedItem}
+            getOptionValue={getOptionValue}
             isItemDisabled={isItemDisabled}
         >
             <DownshiftSelectProvider downshiftProps={downshiftProps}>

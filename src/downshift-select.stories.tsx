@@ -30,6 +30,7 @@ const SelectDemo = (props: DemoProps): React.ReactElement => {
         <div className={clipped ? 'DemoRoot DemoRoot--clipped' : 'DemoRoot'}>
             <Select<DemoCity, number>
                 getItems={getCities}
+                getOptionValue={getCityOptionValue}
                 renderSelectedItem={(city) => <span>{city.name}</span>}
                 disabled={disabled}
             >
@@ -46,20 +47,17 @@ const SelectDemo = (props: DemoProps): React.ReactElement => {
                 </Trigger>
                 <Listbox asChild={true} portal={portal}>
                     <ul className={'ComboboxListbox'}>
-                        <ListBoxItems<DemoCity>
-                            getOptionValue={getCityOptionValue}
-                        >
+                        <ListBoxItems<DemoCity>>
                             {({values}) => (
                                 <>
-                                    {values.map(({rawValue}, index) => (
+                                    {values.map((value) => (
                                         <Option
                                             asChild={true}
-                                            key={rawValue.id}
-                                            rawValue={rawValue}
-                                            index={index}
+                                            key={value.value}
+                                            value={value}
                                         >
                                             <li className={'ComboboxOption'}>
-                                                {rawValue.name}
+                                                {value.rawValue.name}
                                             </li>
                                         </Option>
                                     ))}

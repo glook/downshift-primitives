@@ -30,6 +30,7 @@ const RemountableSelect = (props: {
 }): React.ReactElement => (
     <Select<City, number>
         getItems={props.getItems}
+        getOptionValue={getCityOptionValue}
         renderSelectedItem={(city: City) => <span>{city.name}</span>}
     >
         <Trigger asChild={true}>
@@ -40,17 +41,16 @@ const RemountableSelect = (props: {
         </Trigger>
         <Listbox asChild={true} key={props.listboxKey}>
             <ul className={'ComboboxListbox'}>
-                <ListBoxItems<City> getOptionValue={getCityOptionValue}>
+                <ListBoxItems<City>>
                     {({values}) =>
-                        values.map(({rawValue}, index) => (
+                        values.map((value) => (
                             <Option
                                 asChild={true}
-                                key={rawValue.id}
-                                rawValue={rawValue}
-                                index={index}
+                                key={value.value}
+                                value={value}
                             >
                                 <li className={'ComboboxOption'}>
-                                    {rawValue.name}
+                                    {value.rawValue.name}
                                 </li>
                             </Option>
                         ))

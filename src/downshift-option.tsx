@@ -4,36 +4,24 @@ import {Slot} from '@radix-ui/react-slot';
 import {mergeProps} from '@react-aria/utils';
 import React, {useMemo} from 'react';
 
-import {
-    useBaseDownshiftContext,
-    useDownshiftListBoxContext,
-} from './downshiftComboboxContext';
+import {useBaseDownshiftContext} from './downshiftComboboxContext';
+import type {DownshiftListBoxValue} from './downshift-listbox-items';
 import * as Radix from '@radix-ui/react-primitive';
 
 export interface DownshiftOptionProps<T extends unknown>
     extends React.ComponentPropsWithoutRef<typeof Radix.Primitive.div> {
     asChild?: boolean;
-    rawValue: T;
-    index: number;
+    /** One entry of the `values` that ListBoxItems hands to its render prop. */
+    value: DownshiftListBoxValue<T>;
 }
 
 export const DownshiftOption = <T,>(
     props: DownshiftOptionProps<T>,
 ): React.ReactElement | null => {
     const {downshiftProps} = useBaseDownshiftContext('DownshiftOption');
-    const {getItemProps, highlightedIndex} = downshiftProps;
-    const {selectedItemValue, getOptionValue} =
-        useDownshiftListBoxContext('DownshiftOption');
-    const {rawValue, index, children, asChild, ...rest} = props;
-
-    const itemValue = useMemo(
-        () => getOptionValue(rawValue),
-        [rawValue, getOptionValue],
-    );
-    const isSelected = useMemo(
-        () => selectedItemValue === itemValue,
-        [selectedItemValue, itemValue],
-    );
+    const {getItemProps} = downshiftProps;
+    const {value, children, asChild, ...rest} = props;
+    const {rawValue, index, isSelected, isHighlighted} = value;
 
     const itemProps = getItemProps({
         item: rawValue,
@@ -51,7 +39,7 @@ export const DownshiftOption = <T,>(
         <Component
             data-is-disabled={isDisabled}
             data-is-selected={isSelected}
-            data-is-active={highlightedIndex === index}
+            data-is-active={isHighlighted}
             {...mergeProps(rest, itemProps)}
         >
             {children}

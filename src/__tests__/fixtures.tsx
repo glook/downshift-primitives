@@ -189,18 +189,17 @@ export type ListboxPortal = DownshiftListboxProps['portal'];
 const listboxChildren = (portal?: ListboxPortal): React.ReactElement => (
     <Listbox asChild={true} portal={portal}>
         <ul className={'ComboboxListbox'}>
-            <ListBoxItems<City> getOptionValue={getCityOptionValue}>
+            <ListBoxItems<City>>
                 {({values}) => (
                     <>
-                        {values.map(({rawValue}, index) => (
+                        {values.map((value) => (
                             <Option
                                 asChild={true}
-                                key={rawValue.id}
-                                rawValue={rawValue}
-                                index={index}
+                                key={value.value}
+                                value={value}
                             >
                                 <li className={'ComboboxOption'}>
-                                    {rawValue.name}
+                                    {value.rawValue.name}
                                 </li>
                             </Option>
                         ))}
@@ -273,6 +272,7 @@ export const renderCombobox = (
 ): ComboboxHarness => {
     const {
         getItems = createGetItemsMock(),
+        getOptionValue = getCityOptionValue,
         itemToString = cityToString,
         renderSelectedItem = (city: City) => <span>{city.name}</span>,
         portal,
@@ -282,6 +282,7 @@ export const renderCombobox = (
     const utils = render(
         <Combobox<City, number>
             getItems={getItems}
+            getOptionValue={getOptionValue}
             itemToString={itemToString}
             renderSelectedItem={renderSelectedItem}
             {...rest}
@@ -349,6 +350,7 @@ export const renderSelect = (
 ): SelectHarness => {
     const {
         getItems = createGetItemsMock(),
+        getOptionValue = getCityOptionValue,
         renderSelectedItem = (city: City) => <span>{city.name}</span>,
         portal,
         ...rest
@@ -357,6 +359,7 @@ export const renderSelect = (
     const utils = render(
         <Select<City, number>
             getItems={getItems}
+            getOptionValue={getOptionValue}
             renderSelectedItem={renderSelectedItem}
             {...rest}
         >

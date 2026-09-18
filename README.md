@@ -17,6 +17,7 @@ import {Arrow, Combobox, Input, Listbox, ListBoxItems, Option, OptionState, Sele
 
 <Combobox<City, number>
     getItems={getCities}
+    getOptionValue={(city) => city.id}
     itemToString={(city) => city?.name ?? ''}
     renderSelectedItem={(city) => <span>{city.name}</span>}
     debounceTime={300}
@@ -33,12 +34,12 @@ import {Arrow, Combobox, Input, Listbox, ListBoxItems, Option, OptionState, Sele
 
     <Listbox asChild>
         <ul className="listbox">
-            <ListBoxItems<City> getOptionValue={(city) => city.id}>
+            <ListBoxItems<City>>
                 {({values}) => (
                     <>
-                        {values.map(({rawValue}, index) => (
-                            <Option asChild key={rawValue.id} rawValue={rawValue} index={index}>
-                                <li className="option">{rawValue.name}</li>
+                        {values.map((value) => (
+                            <Option asChild key={value.value} value={value}>
+                                <li className="option">{value.rawValue.name}</li>
                             </Option>
                         ))}
                         <OptionState type="loading" asChild>
@@ -90,11 +91,13 @@ Items are cleared when the menu closes and re-fetched on open. In-flight request
 
 | Root | Selection | Required props |
 | --- | --- | --- |
-| `Combobox` | single, with text input | `getItems`, `itemToString`, `renderSelectedItem` |
+| `Combobox` | single, with text input | `getItems`, `getOptionValue`, `itemToString`, `renderSelectedItem` |
 | `MultiCombobox` | multiple, with chips | `getItems`, `getOptionValue`, `renderSelectedItem`, `selectedItems`, `onChange` |
-| `Select` | single, no text input | `getItems`, `renderSelectedItem` |
+| `Select` | single, no text input | `getItems`, `getOptionValue`, `renderSelectedItem` |
 
-`MultiCombobox` is controlled: it holds no selection of its own. Selected items are hidden from the list, compared by `getOptionValue`.
+`getOptionValue` is the item identity: selection and highlight are compared by it, and `MultiCombobox` hides the already selected items by it. `ListBoxItems` can override it for one list.
+
+`MultiCombobox` is controlled: it holds no selection of its own.
 
 Anything else from downshift's `useCombobox` / `useSelect` (`onSelectedItemChange`, `stateReducer`, …) is passed straight through.
 
@@ -103,6 +106,8 @@ Anything else from downshift's `useCombobox` / `useSelect` (`onSelectedItemChang
 `Trigger`, `Input`, `Label`, `Listbox`, `ListBoxItems`, `Option`, `OptionState`, `SelectedItem`, `SelectedItems`, `Chip`, `ChipRemove`, `Clear`, `Arrow`, `LoadingIndicator`.
 
 Parts that read the root: `Trigger`, `Clear` and `SelectedItem` render the right variant automatically. Parts that do not apply render nothing — `Input` inside a `Select`, `Placeholder` inside a `Combobox`.
+
+`ListBoxItems` hands its render prop `values: DownshiftListBoxValue[]` - `{value, rawValue, index, isSelected, isDisabled, isHighlighted}` - and `Option` takes one of them as `value`. The `data-is-selected` / `data-is-active` / `data-is-disabled` attributes come straight from it.
 
 `OptionState` takes `type: 'loading' | 'loadingMore' | 'noResults' | 'error' | 'belowMinLength'` and decides on its own whether to show.
 
@@ -137,6 +142,14 @@ The listbox is positioned with floating-ui and exposes `--list-box-reference-wid
 ```
 
 `applyWidth` (default `true`) also hard-sets the listbox `width` / `maxWidth` from the trigger.
+
+## Breaking changes
+
+### 0.11
+
+- `getOptionValue` is a required prop of every root (`Select`, `Combobox`, `MultiCombobox`); `ListBoxItems.getOptionValue` became an optional override.
+- `Option` takes `value={value}` (an entry of `values`) instead of `rawValue` + `index`.
+- Migration: move `getOptionValue` from `ListBoxItems` to the root, replace `values.map(({rawValue}, index) => <Option rawValue={rawValue} index={index}>)` with `values.map((value) => <Option value={value}>)`.
 
 ## Development
 

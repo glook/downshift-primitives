@@ -27,8 +27,10 @@ export interface DownshiftSelectedItemsProps<T> {
 const MultiComboboxSelectedItems = <T,>(
     props: DownshiftSelectedItemsProps<T>,
 ): React.ReactElement => {
-    const {selectedItems, activeIndex, getOptionValue} =
-        useDownshiftMultiComboboxContext('DownshiftSelectedItems');
+    const {selectedItems, activeIndex} = useDownshiftMultiComboboxContext(
+        'DownshiftSelectedItems',
+    );
+    const {getOptionValue} = useBaseDownshiftContext('DownshiftSelectedItems');
     const {children} = props;
 
     const values = useMemo<DownshiftSelectedItemValue<T>[]>(

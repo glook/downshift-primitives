@@ -32,6 +32,7 @@ export const DownshiftCombobox = <T, C>(
         debounceTime = 0,
         minLength,
         renderSelectedItem,
+        getOptionValue,
         isLoading, // input
         dropdownMenuFloatingOptions,
         // No default: a defined initialInputValue makes downshift skip deriving
@@ -100,6 +101,7 @@ export const DownshiftCombobox = <T, C>(
             setIsHovered={setIsHovered}
             type={'combobox'}
             renderSelectedItem={renderSelectedItem}
+            getOptionValue={getOptionValue}
             isItemDisabled={isItemDisabled}
             hasSelectedItem={!!comboboxMethods.selectedItem}
             isBelowMinLength={isBelowMinLength}
