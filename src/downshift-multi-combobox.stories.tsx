@@ -82,20 +82,17 @@ const MultiComboboxDemo = (props: DemoProps): React.ReactElement => {
                 </Trigger>
                 <Listbox asChild={true} portal={portal}>
                     <ul className={'ComboboxListbox'}>
-                        <ListBoxItems<DemoCity>
-                            getOptionValue={getCityOptionValue}
-                        >
+                        <ListBoxItems<DemoCity>>
                             {({values}) => (
                                 <>
-                                    {values.map(({rawValue}, index) => (
+                                    {values.map((value) => (
                                         <Option
                                             asChild={true}
-                                            key={rawValue.id}
-                                            rawValue={rawValue}
-                                            index={index}
+                                            key={value.value}
+                                            value={value}
                                         >
                                             <li className={'ComboboxOption'}>
-                                                {rawValue.name}
+                                                {value.rawValue.name}
                                             </li>
                                         </Option>
                                     ))}

@@ -14,6 +14,7 @@ const renderSelectMarkup = (portal?: ListboxPortal): string =>
     renderToString(
         <Select<string, void>
             getItems={() => ({items: []})}
+            getOptionValue={(item) => item}
             renderSelectedItem={(item) => item}
         >
             <Trigger>Select</Trigger>

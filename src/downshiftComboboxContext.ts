@@ -25,6 +25,7 @@ interface DownshiftContext {
     downshiftProps: UseComboboxReturnValue<any> | UseSelectReturnValue<any>;
     type: DownshiftType;
     renderSelectedItem: (value: any) => React.ReactNode;
+    getOptionValue: (value: any) => string;
     isItemDisabled?:
         | UseSelectProps<any>['isItemDisabled']
         | UseComboboxProps<any>['isItemDisabled'];
@@ -43,9 +44,6 @@ interface DownshiftComboboxContext {
 interface DownshiftMultiComboboxContext {
     selectedItems: any[];
     activeIndex: number;
-    // required in multi-combobox: items are compared by it. In the other modes
-    // getOptionValue comes as a ListBoxItems prop rather than through context
-    getOptionValue: (value: any) => string;
     getSelectedItemProps: UseMultipleSelectionReturnValue<any>['getSelectedItemProps'];
     getDropdownProps: UseMultipleSelectionReturnValue<any>['getDropdownProps'];
     removeSelectedItem: UseMultipleSelectionReturnValue<any>['removeSelectedItem'];
@@ -62,11 +60,6 @@ interface DownshiftChipContext {
 
 interface DownshiftSelectContext {
     downshiftProps: UseSelectReturnValue<any>;
-}
-
-interface DownshiftListBoxContext {
-    getOptionValue: (value: any) => string;
-    selectedItemValue: string | undefined;
 }
 
 export const [BaseDownshiftContextProvider, useBaseDownshiftContext] =
@@ -87,6 +80,3 @@ export const [DownshiftChipProvider, useDownshiftChipContext] =
 
 export const [DownshiftSelectProvider, useDownshiftSelectContext] =
     createContext<DownshiftSelectContext>('DownshiftSelectContext');
-
-export const [DownshiftListBoxProvider, useDownshiftListBoxContext] =
-    createContext<DownshiftListBoxContext>('DownshiftListBoxContext');

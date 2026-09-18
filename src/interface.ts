@@ -8,6 +8,8 @@ type MaybePromise<T> = T | Promise<T>;
 
 export interface DownshiftProps<Item, Cursor = void> {
     getItems: DownshiftGetItemsFn<Item, Cursor>;
+    /** Item identity: selection, highlight and multi-select filtering compare by it. */
+    getOptionValue: (item: Item) => string;
     isLoading?: boolean;
     disabled?: boolean;
     dropdownMenuFloatingOptions?: DropdownMenuFloatingOptions;

@@ -30,8 +30,6 @@ export interface DownshiftMultiComboboxProps<Item, Cursor>
         > {
     selectedItems: Item[];
     onChange: (items: Item[]) => void;
-    // used to compare items: selected ones are hidden from the list by this value
-    getOptionValue: (item: Item) => string;
     itemToString?: (item: Item | null) => string;
     debounceTime?: number;
     // shorter filterText does not call getItems; OptionState type="belowMinLength" shows instead
@@ -199,6 +197,7 @@ export const DownshiftMultiCombobox = <T, C>(
             setIsHovered={setIsHovered}
             type={'multi-combobox'}
             renderSelectedItem={renderSelectedItem}
+            getOptionValue={getOptionValue}
             isItemDisabled={isItemDisabled}
             hasSelectedItem={selectedItems.length > 0}
             isBelowMinLength={isBelowMinLength}
@@ -211,7 +210,6 @@ export const DownshiftMultiCombobox = <T, C>(
                 <DownshiftMultiComboboxProvider
                     selectedItems={selectedItems}
                     activeIndex={activeIndex}
-                    getOptionValue={getOptionValue}
                     getSelectedItemProps={getSelectedItemProps}
                     getDropdownProps={getDropdownProps}
                     removeSelectedItem={removeSelectedItem}

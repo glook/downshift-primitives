@@ -2,15 +2,13 @@
 
 import React, {useMemo} from 'react';
 
-import {
-    DownshiftListBoxProvider,
-    useBaseDownshiftContext,
-} from './downshiftComboboxContext';
+import {useBaseDownshiftContext} from './downshiftComboboxContext';
 import type {LoadingState} from './interface';
 
 export interface DownshiftListBoxValue<T> {
     value: string;
     rawValue: T;
+    index: number;
     isSelected: boolean;
     isDisabled: boolean;
     isHighlighted: boolean;
@@ -23,19 +21,25 @@ export interface DownshiftListBoxItemsChildrenProps<T> {
 }
 
 export interface DownshiftListBoxItemsProps<T> {
-    getOptionValue: (value: T) => string;
+    /** Overrides the root's getOptionValue for this list only. */
+    getOptionValue?: (value: T) => string;
     children: (props: DownshiftListBoxItemsChildrenProps<T>) => React.ReactNode;
 }
 
 export const DownshiftListBoxItems = <T,>(
     props: DownshiftListBoxItemsProps<T>,
 ): React.ReactElement | null => {
-    const {loadingState, items, downshiftProps, isItemDisabled} =
-        useBaseDownshiftContext('DownshiftListBoxItems');
+    const {
+        loadingState,
+        items,
+        downshiftProps,
+        isItemDisabled,
+        getOptionValue: rootGetOptionValue,
+    } = useBaseDownshiftContext('DownshiftListBoxItems');
 
     const listboxItems = items as T[];
     const {selectedItem, highlightedIndex, inputValue} = downshiftProps;
-    const {getOptionValue, children} = props;
+    const {getOptionValue = rootGetOptionValue, children} = props;
 
     const selectedItemValue = selectedItem
         ? getOptionValue(selectedItem)
@@ -48,6 +52,7 @@ export const DownshiftListBoxItems = <T,>(
                 return {
                     rawValue: item,
                     value: optionValue,
+                    index,
                     isDisabled: isItemDisabled
                         ? isItemDisabled(item, index)
                         : false,
@@ -74,14 +79,7 @@ export const DownshiftListBoxItems = <T,>(
         [loadingState, inputValue, listBoxValues],
     );
 
-    return (
-        <DownshiftListBoxProvider
-            getOptionValue={getOptionValue}
-            selectedItemValue={selectedItemValue}
-        >
-            {childrenElement}
-        </DownshiftListBoxProvider>
-    );
+    return <>{childrenElement}</>;
 };
 
 export const ListBoxItems = DownshiftListBoxItems;
